@@ -65,7 +65,12 @@ const ResumenExpedientes: React.FC<ResumenExpedientesProps> = ({ usuario }) => {
           referenciaArchivos = `\n\nReferencia de documentos subidos:\n${textos}`;
         }
       }
-      const prompt = `Redacta un resumen ${datos.tipo_resumen.toLowerCase()} de expediente para SEGEPLAN con la siguiente información:\n\nExpediente No.: ${datos.numero_expediente}\nTítulo: ${datos.titulo_expediente}\nFecha de inicio: ${datos.fecha_inicio}\nResponsable: ${datos.responsable}\nDepartamento: ${datos.departamento}\nEstado: ${datos.estado_expediente}\nPáginas totales: ${datos.paginas_totales || 'N/A'}${archivos}${referenciaArchivos}\n\nEl documento debe estar firmado por: ${usuario.nombre}, ${usuario.cargo}, SEGEPLAN. Usa un formato profesional y adecuado para un resumen de expediente oficial.`;
+      const prompt = `Eres un agente especializado en cálculo automático de plazos legales en procedimientos administrativos municipales.
+      Calcula plazos para: \n\nExpediente: ${datos.numero_expediente}\nProcedimiento: ${datos.titulo_expediente}
+      \nFecha inicio: ${datos.fecha_inicio}\nResponsable: ${datos.responsable}\nUnidad: ${datos.departamento}
+      \nEstado: ${datos.estado_expediente}\nTipo: ${datos.tipo_resumen}${archivos}${referenciaArchivos}
+      \n\nCalcula plazos según Ley de lo Contencioso Administrativo, términos legales, días hábiles, fechas límite.
+      Firma: ${usuario.nombre}, ${usuario.cargo}, Departamento Jurídico - Municipalidad de Guatemala.`;
 
       const agent = new Agent({
         name: "ResumenExpedientesIA",
@@ -82,21 +87,21 @@ const ResumenExpedientes: React.FC<ResumenExpedientesProps> = ({ usuario }) => {
 
   const recursosEspecificos = [
     {
-      categoria: 'Tipos de Resumen',
+      categoria: 'Tipos de Plazos',
       items: [
-        'Resumen ejecutivo',
-        'Resumen técnico',
-        'Resumen administrativo',
-        'Resumen legal'
+        'Plazos administrativos',
+        'Plazos procesales',
+        'Términos de notificación',
+        'Términos de recurso'
       ]
     },
     {
-      categoria: 'Metodología',
+      categoria: 'Normativa Aplicable',
       items: [
-        'Análisis de contenido',
-        'Identificación de elementos clave',
-        'Síntesis de información',
-        'Estructura lógica'
+        'Ley de lo Contencioso Administrativo',
+        'Código Procesal Civil y Mercantil',
+        'Ley del Organismo Judicial',
+        'Código Municipal'
       ]
     }
   ];
@@ -105,10 +110,10 @@ const ResumenExpedientes: React.FC<ResumenExpedientesProps> = ({ usuario }) => {
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Resumen de Expedientes
+          Cálculo de Plazos Legales
         </h2>
         <p className="text-gray-600">
-          Genera resúmenes ejecutivos de expedientes complejos con análisis estructurado
+          Calcula automáticamente plazos procesales y términos legales en procedimientos
         </p>
       </div>
 

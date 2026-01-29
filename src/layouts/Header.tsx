@@ -33,38 +33,38 @@ const Header: React.FC<HeaderProps> = ({ usuario, onCerrarSesion }) => {
               <span className="text-slate-300">Síguenos:</span>
               <div className="flex items-center space-x-3">
                 <a
-                  href="https://www.facebook.com/segeplan"
+                  href="https://www.facebook.com/MuniGuate"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-1 rounded hover:bg-slate-600 transition-colors"
-                  title="Facebook SEGEPLAN"
+                  title="Facebook Municipalidad de Guatemala"
                 >
                   <Facebook size={16} />
                 </a>
                 <a
-                  href="https://twitter.com/segeplan"
+                  href="https://twitter.com/MuniGuate"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-1 rounded hover:bg-slate-600 transition-colors"
-                  title="Twitter SEGEPLAN"
+                  title="Twitter Municipalidad de Guatemala"
                 >
                   <Twitter size={16} />
                 </a>
                 <a
-                  href="https://www.instagram.com/segeplan"
+                  href="https://www.instagram.com/muniguate"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-1 rounded hover:bg-slate-600 transition-colors"
-                  title="Instagram SEGEPLAN"
+                  title="Instagram Municipalidad de Guatemala"
                 >
                   <Instagram size={16} />
                 </a>
                 <a
-                  href="https://www.youtube.com/segeplan"
+                  href="https://www.youtube.com/@MuniGuate"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-1 rounded hover:bg-slate-600 transition-colors"
-                  title="YouTube SEGEPLAN"
+                  title="YouTube Municipalidad de Guatemala"
                 >
                   <Youtube size={16} />
                 </a>
@@ -77,18 +77,17 @@ const Header: React.FC<HeaderProps> = ({ usuario, onCerrarSesion }) => {
         <>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-24">
-              {/* Logos SEGEPLAN y Red Ciudadana */}
+              {/* Logos Municipalidad de Guatemala y Red Ciudadana */}
               <div className="flex items-center space-x-8">
                 <div className="flex items-center space-x-3">
-                  <img
-                    src={LogoSegeplan}
-                    alt="SEGEPLAN"
-                    className="h-16 w-auto object-contain"
-                  />
+                  <div className="text-white">
+                    <h1 className="text-xl font-bold">Municipalidad de Guatemala</h1>
+                    <p className="text-sm text-slate-300">Departamento Jurídico</p>
+                  </div>
                 </div>
-                
+
                 <div className="h-12 w-px bg-slate-600"></div>
-                
+
                 <div className="flex items-center space-x-3">
                   <img
                     src={LogoRedCiudadana}

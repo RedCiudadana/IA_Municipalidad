@@ -49,11 +49,11 @@ const RedactorOficios: React.FC<RedactorOficiosProps> = ({ usuario }) => {
       });
       setDefaultOpenAIClient(client);
 
-      const prompt = `Redacta un oficio institucional siguiendo los protocolos de SEGEPLAN con la siguiente información:
+      const prompt = `Eres un agente especializado en búsqueda de normativa municipal guatemalteca. Busca y analiza la normativa aplicable según:
       \n\nDestinatario: ${datos.destinatario}\nCargo del destinatario: ${datos.cargo_destinatario}
       \nInstitución: ${datos.institucion}\nAsunto: ${datos.asunto}\nTipo de lenguaje: ${datos.tipo_lenguaje}
-      \nNivel de urgencia: ${datos.urgencia}\n\nEl documento debe estar firmado por: ${usuario.nombre}, ${usuario.cargo}, 
-      SEGEPLAN. Usa un formato ${datos.tipo_lenguaje} y adecuado para un oficio oficial.`;
+      \nNivel de urgencia: ${datos.urgencia}\n\nAnaliza el Código Municipal (Decreto 12-2002), ordenanzas municipales vigentes,
+      y normativa relacionada. Firma: ${usuario.nombre}, ${usuario.cargo}, Departamento Jurídico - Municipalidad de Guatemala.`;
 
       const agent = new Agent({
         name: "RedactorOficiosIA",
@@ -70,19 +70,19 @@ const RedactorOficios: React.FC<RedactorOficiosProps> = ({ usuario }) => {
 
   const recursosEspecificos = [
     {
-      categoria: 'Plantillas de Oficios',
+      categoria: 'Normativa Municipal',
       items: [
-        'Oficio de solicitud de información',
-        'Oficio de convocatoria',
-        'Oficio de respuesta institucional'
+        'Código Municipal (Decreto 12-2002)',
+        'Ordenanzas municipales vigentes',
+        'Reglamentos municipales'
       ]
     },
     {
-      categoria: 'Normativa',
+      categoria: 'Leyes Aplicables',
       items: [
-        'Manual de correspondencia oficial',
-        'Protocolo de comunicaciones SEGEPLAN',
-        'Guía de redacción institucional'
+        'Constitución Política de Guatemala',
+        'Ley de Servicio Municipal',
+        'Ley Orgánica del Presupuesto'
       ]
     }
   ];
@@ -91,10 +91,10 @@ const RedactorOficios: React.FC<RedactorOficiosProps> = ({ usuario }) => {
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Redactor de Oficios
+          Búsqueda de Normativa Municipal
         </h2>
         <p className="text-gray-600">
-          Genera oficios formales siguiendo los protocolos institucionales de SEGEPLAN
+          Localiza y analiza normativa aplicable del Código Municipal y ordenanzas vigentes
         </p>
       </div>
 

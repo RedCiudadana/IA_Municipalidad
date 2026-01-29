@@ -66,7 +66,13 @@ const AnalisisInversion: React.FC<AnalisisInversionProps> = ({ usuario }) => {
           referenciaArchivos = `\n\nReferencia de documentos subidos:\n${textos}`;
         }
       }
-      const prompt = `Redacta un análisis ${datos.tipo_analisis.toLowerCase()} de expediente de inversión pública para SEGEPLAN con la siguiente información:\n\nCódigo del proyecto: ${datos.codigo_proyecto}\nNombre del proyecto: ${datos.nombre_proyecto}\nInstitución ejecutora: ${datos.institucion_ejecutora}\nMonto total: Q. ${Number(datos.monto_total).toLocaleString('es-GT')}\nPeríodo de ejecución: ${datos.fecha_inicio} - ${datos.fecha_fin}\nCategoría: ${datos.categoria_inversion}\nRegión: ${datos.region}${archivos}${referenciaArchivos}\n\nEl documento debe estar firmado por: ${usuario.nombre}, ${usuario.cargo}, SEGEPLAN. Usa un formato profesional y adecuado para un análisis de expediente oficial.`;
+      const prompt = `Eres un agente especializado en redacción de notificaciones jurídicas municipales conforme a requisitos legales.
+      Redacta notificación con: \n\nExpediente: ${datos.codigo_proyecto}\nProcedimiento: ${datos.nombre_proyecto}
+      \nDestinatario: ${datos.institucion_ejecutora}\nMonto/Valor: Q. ${Number(datos.monto_total).toLocaleString('es-GT')}
+      \nFecha inicio: ${datos.fecha_inicio}\nFecha límite: ${datos.fecha_fin}\nTipo: ${datos.categoria_inversion}
+      \nMedio notificación: ${datos.tipo_analisis}\nLugar: ${datos.region}${archivos}${referenciaArchivos}
+      \n\nIncluye requisitos legales de notificación, términos, plazos, efectos jurídicos.
+      Firma: ${usuario.nombre}, ${usuario.cargo}, Departamento Jurídico - Municipalidad de Guatemala.`;
 
       const agent = new Agent({
         name: "AnalisisInversionIA",
@@ -83,21 +89,21 @@ const AnalisisInversion: React.FC<AnalisisInversionProps> = ({ usuario }) => {
 
   const recursosEspecificos = [
     {
-      categoria: 'Marco Normativo',
+      categoria: 'Tipos de Notificación',
       items: [
-        'Ley de Inversión Pública',
-        'Reglamento SNIP',
-        'Guías metodológicas',
-        'Criterios de evaluación'
+        'Notificación personal',
+        'Notificación por correo',
+        'Notificación por edicto',
+        'Notificación electrónica'
       ]
     },
     {
-      categoria: 'Herramientas de Análisis',
+      categoria: 'Requisitos Legales',
       items: [
-        'Análisis costo-beneficio',
-        'Evaluación de riesgos',
-        'Indicadores de impacto',
-        'Matrices de evaluación'
+        'Código Procesal Civil y Mercantil',
+        'Ley del Organismo Judicial',
+        'Ley de lo Contencioso Administrativo',
+        'Efectos de la notificación'
       ]
     }
   ];
@@ -106,10 +112,10 @@ const AnalisisInversion: React.FC<AnalisisInversionProps> = ({ usuario }) => {
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Análisis de Expediente de Inversión
+          Redacción de Notificaciones Jurídicas
         </h2>
         <p className="text-gray-600">
-          Analiza y evalúa expedientes de proyectos de inversión pública bajo normativa SNIP
+          Redacta notificaciones jurídicas conforme a requisitos legales de notificación
         </p>
       </div>
 

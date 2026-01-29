@@ -31,77 +31,77 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
   const navigate = useNavigate();
   const agentes = [
     {
-      id: 'redactor-oficios',
-      titulo: 'Redactor de Oficios',
-      descripcion: 'Genera oficios formales siguiendo protocolos institucionales de SEGEPLAN',
-      icono: Send,
+      id: 'busqueda-normativa',
+      titulo: 'Búsqueda de Normativa',
+      descripcion: 'Localiza y analiza normativa aplicable del Código Municipal, leyes y ordenanzas vigentes',
+      icono: BookOpen,
       color: 'from-blue-500 to-blue-600',
       bgColor: 'bg-blue-50',
       iconColor: 'text-blue-600',
-      categoria: 'Comunicación Externa',
+      categoria: 'Asesoría Jurídica',
       tiempo: '2-3 min',
       popular: true,
       ruta: '/agentes/oficios'
     },
     {
-      id: 'generador-memos',
-      titulo: 'Generador de Memos',
-      descripcion: 'Crea memorandos internos con formato estandarizado para comunicación interna',
-      icono: MessageSquare,
+      id: 'dictamenes-juridicos',
+      titulo: 'Dictámenes Jurídicos',
+      descripcion: 'Elabora dictámenes con análisis de precedentes y fundamentación legal completa',
+      icono: FileEdit,
       color: 'from-emerald-500 to-emerald-600',
       bgColor: 'bg-emerald-50',
       iconColor: 'text-emerald-600',
-      categoria: 'Comunicación Interna',
-      tiempo: '1-2 min',
+      categoria: 'Asesoría Jurídica',
+      tiempo: '5-7 min',
+      popular: true,
       ruta: '/agentes/memos'
     },
     {
-      id: 'redactor-cartas',
-      titulo: 'Redactor de Cartas',
-      descripcion: 'Redacta cartas oficiales con protocolo diplomático y ceremonial apropiado',
-      icono: ScrollText,
-      color: 'from-purple-500 to-purple-600',
-      bgColor: 'bg-purple-50',
-      iconColor: 'text-purple-600',
-      categoria: 'Protocolo Oficial',
-      tiempo: '3-4 min',
-      ruta: '/agentes/cartas'
-    },
-    {
-      id: 'asistente-minutas',
-      titulo: 'Asistente de Minutas',
-      descripcion: 'Elabora minutas y actas de reuniones institucionales con formato estándar',
+      id: 'revision-contratos',
+      titulo: 'Revisión de Contratos',
+      descripcion: 'Revisa contratos municipales verificando cumplimiento legal y cláusulas esenciales',
       icono: FileCheck,
       color: 'from-orange-500 to-orange-600',
       bgColor: 'bg-orange-50',
       iconColor: 'text-orange-600',
-      categoria: 'Gestión de Reuniones',
-      tiempo: '4-5 min',
-      ruta: '/agentes/minutas'
+      categoria: 'Contrataciones',
+      tiempo: '4-6 min',
+      ruta: '/agentes/cartas'
     },
     {
-      id: 'resumen-expedientes',
-      titulo: 'Resumen de Expedientes',
-      descripcion: 'Genera resúmenes ejecutivos de expedientes complejos con análisis estructurado',
-      icono: FolderSearch,
-      color: 'from-teal-500 to-teal-600',
-      bgColor: 'bg-teal-50',
-      iconColor: 'text-teal-600',
-      categoria: 'Análisis Documental',
-      tiempo: '5-7 min',
-      popular: true,
-      ruta: '/agentes/resumenes'
-    },
-    {
-      id: 'analisis-inversion',
-      titulo: 'Análisis de Inversión',
-      descripcion: 'Analiza y evalúa expedientes de proyectos de inversión pública bajo normativa SNIP',
-      icono: TrendingUp,
+      id: 'elaboracion-pliegos',
+      titulo: 'Elaboración de Pliegos',
+      descripcion: 'Genera pliegos de contratación conforme a Ley de Contrataciones del Estado',
+      icono: ScrollText,
       color: 'from-red-500 to-red-600',
       bgColor: 'bg-red-50',
       iconColor: 'text-red-600',
-      categoria: 'Inversión Pública',
-      tiempo: '7-10 min',
+      categoria: 'Contrataciones',
+      tiempo: '6-8 min',
+      ruta: '/agentes/minutas'
+    },
+    {
+      id: 'calculo-plazos',
+      titulo: 'Cálculo de Plazos Legales',
+      descripcion: 'Calcula automáticamente plazos procesales y términos legales en procedimientos',
+      icono: Clock,
+      color: 'from-teal-500 to-teal-600',
+      bgColor: 'bg-teal-50',
+      iconColor: 'text-teal-600',
+      categoria: 'Procedimientos Administrativos',
+      tiempo: '1-2 min',
+      ruta: '/agentes/resumenes'
+    },
+    {
+      id: 'redaccion-notificaciones',
+      titulo: 'Redacción de Notificaciones',
+      descripcion: 'Redacta notificaciones jurídicas conforme a requisitos legales de notificación',
+      icono: Send,
+      color: 'from-indigo-500 to-indigo-600',
+      bgColor: 'bg-indigo-50',
+      iconColor: 'text-indigo-600',
+      categoria: 'Procedimientos Administrativos',
+      tiempo: '3-4 min',
       ruta: '/agentes/analisis'
     }
   ];
@@ -109,27 +109,27 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
   const beneficios = [
     {
       icono: Clock,
-      titulo: 'Ahorro de Tiempo',
-      descripcion: 'Reduce el tiempo de redacción hasta en un 80%',
+      titulo: 'Eficiencia Operativa',
+      descripcion: 'Reduce tiempo de análisis jurídico entre 40-60%',
       color: 'text-blue-600'
     },
     {
       icono: Shield,
-      titulo: 'Cumplimiento Normativo',
-      descripcion: 'Garantiza el cumplimiento de protocolos institucionales',
+      titulo: 'Seguridad Jurídica',
+      descripcion: 'Garantiza cumplimiento de normativa municipal y constitucional',
       color: 'text-emerald-600'
     },
     {
       icono: Target,
-      titulo: 'Precisión Profesional',
-      descripcion: 'Documentos con formato y lenguaje institucional correcto',
-      color: 'text-purple-600'
+      titulo: 'Precisión Legal',
+      descripcion: 'Análisis consistente con fundamentación jurídica correcta',
+      color: 'text-orange-600'
     },
     {
       icono: Sparkles,
-      titulo: 'Inteligencia Artificial',
-      descripcion: 'Tecnología avanzada adaptada a la administración pública',
-      color: 'text-orange-600'
+      titulo: 'IA Especializada',
+      descripcion: 'Agentes entrenados en derecho municipal guatemalteco',
+      color: 'text-indigo-600'
     }
   ];
 
@@ -153,15 +153,15 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
                     Bienvenido, {usuario.nombre}
                   </h1>
                   <p className="text-blue-200 text-xl font-semibold">
-                    {usuario.cargo} • SEGEPLAN
+                    {usuario.cargo} • Municipalidad de Guatemala
                   </p>
                 </div>
               </div>
               
               <p className="text-white/90 text-xl leading-relaxed mb-8 max-w-3xl">
-                Optimiza tu trabajo con nuestros agentes de inteligencia artificial especializados 
-                en documentos oficiales. Genera contenido profesional que cumple con todos los 
-                estándares institucionales de SEGEPLAN.
+                Sistema de Asistencia Jurídica Municipal potenciado por IA. Agiliza análisis legales,
+                dictámenes, contratos y procedimientos administrativos con herramientas especializadas
+                en derecho municipal guatemalteco.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -190,10 +190,10 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
       <section className="bg-gradient-to-br from-gray-50 to-white rounded-3xl p-12 border border-gray-100">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            ¿Por qué usar AIGP-SEGEPLAN?
+            ¿Por qué usar IA Jurídico Municipal?
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Una solución integral para la modernización de la gestión documental en el sector público
+            Herramienta especializada para fortalecer la capacidad jurídica del gobierno municipal
           </p>
         </div>
 
@@ -202,10 +202,10 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
             <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
               <Zap size={32} className="text-white" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Tecnología Avanzada</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">Tecnología Especializada</h3>
             <p className="text-gray-600 leading-relaxed">
-              Inteligencia artificial especializada en documentos gubernamentales, 
-              entrenada con protocolos institucionales de SEGEPLAN.
+              Agentes de IA especializados en derecho municipal guatemalteco,
+              con conocimiento del Código Municipal y normativa aplicable.
             </p>
           </div>
 
@@ -213,10 +213,10 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
             <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
               <Users size={32} className="text-white" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Colaboración Institucional</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">Apoyo Profesional</h3>
             <p className="text-gray-600 leading-relaxed">
-              Proyecto conjunto entre SEGEPLAN y Red Ciudadana para fortalecer 
-              la administración pública con herramientas digitales modernas.
+              Complementa el criterio profesional del abogado municipal
+              con análisis automatizado y búsqueda inteligente de normativa.
             </p>
           </div>
 
@@ -224,10 +224,10 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
             <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
               <Award size={32} className="text-white" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Calidad Garantizada</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">Seguridad Jurídica</h3>
             <p className="text-gray-600 leading-relaxed">
-              Documentos que cumplen con estándares institucionales, 
-              normativas vigentes y mejores prácticas de redacción oficial.
+              Documentos legales fundamentados en normativa vigente,
+              con análisis de precedentes y cumplimiento constitucional.
             </p>
           </div>
         </div>
@@ -247,7 +247,7 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Selecciona un Agente</h3>
               <p className="text-gray-600">
-                Elige el tipo de documento que necesitas generar de nuestra lista de agentes especializados.
+                Elige el agente jurídico especializado según tu necesidad: dictámenes, contratos, normativa.
               </p>
             </div>
 
@@ -255,9 +255,9 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
               <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6 text-white font-bold text-2xl shadow-lg">
                 2
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Completa la Información</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Proporciona los Datos</h3>
               <p className="text-gray-600">
-                Llena el formulario con los datos necesarios. El sistema te guiará paso a paso.
+                Ingresa la información del caso, normativa relevante o documentos a analizar.
               </p>
             </div>
 
@@ -265,9 +265,9 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
               <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 text-white font-bold text-2xl shadow-lg">
                 3
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Genera y Descarga</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Obtén el Resultado</h3>
               <p className="text-gray-600">
-                Obtén tu documento profesional listo para usar, editar o compartir según necesites.
+                Recibe análisis jurídico fundamentado, listo para revisión y aplicación profesional.
               </p>
             </div>
           </div>
@@ -278,11 +278,11 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
       <section>
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Selecciona tu Agente Especializado
+            Agentes Jurídicos Especializados
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Cada agente está diseñado para un tipo específico de documento institucional, 
-            garantizando resultados profesionales y conformes a la normativa.
+            Cada agente está especializado en áreas específicas del derecho municipal,
+            garantizando análisis fundamentado en normativa guatemalteca vigente.
           </p>
         </div>
         

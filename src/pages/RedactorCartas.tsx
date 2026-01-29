@@ -50,7 +50,11 @@ const RedactorCartas: React.FC<RedactorCartasProps> = ({ usuario }) => {
       });
       setDefaultOpenAIClient(client);
 
-      const prompt = `Redacta una carta oficial siguiendo el protocolo institucional de SEGEPLAN con la siguiente información:\n\nDestinatario: ${datos.destinatario}\nCargo: ${datos.cargo_destinatario}\nInstitución: ${datos.institucion}\nCiudad: ${datos.ciudad}\nAsunto: ${datos.asunto}\nNivel de protocolo: ${datos.protocolo}\nTipo de carta: ${datos.tipo_carta}\n\nEl documento debe estar firmado por: ${usuario.nombre}, ${usuario.cargo}, SEGEPLAN. Usa un formato profesional y adecuado para una carta oficial.`;
+      const prompt = `Eres un agente especializado en revisión de contratos municipales conforme a la Ley de Contrataciones del Estado.
+      Revisa el contrato con: \n\nContratista: ${datos.destinatario}\nTipo: ${datos.cargo_destinatario}\nObjeto: ${datos.institucion}
+      \nMonto: ${datos.ciudad}\nAsunto: ${datos.asunto}\nModalidad: ${datos.protocolo}\nRevisión: ${datos.tipo_carta}
+      \n\nVerifica: cumplimiento legal, cláusulas esenciales, garantías, plazos. Firma: ${usuario.nombre}, ${usuario.cargo},
+      Departamento Jurídico - Municipalidad de Guatemala.`;
 
       const agent = new Agent({
         name: "RedactorCartasIA",
@@ -67,21 +71,21 @@ const RedactorCartas: React.FC<RedactorCartasProps> = ({ usuario }) => {
 
   const recursosEspecificos = [
     {
-      categoria: 'Protocolo Diplomático',
+      categoria: 'Normativa de Contratación',
       items: [
-        'Tratamientos oficiales',
-        'Fórmulas de cortesía',
-        'Estructura protocolaria',
-        'Ceremonial institucional'
+        'Ley de Contrataciones del Estado',
+        'Reglamento de Contrataciones',
+        'Código Municipal (contratación)',
+        'Manual de contrataciones'
       ]
     },
     {
-      categoria: 'Tipos de Cartas',
+      categoria: 'Aspectos a Revisar',
       items: [
-        'Cartas de invitación oficial',
-        'Cartas de agradecimiento',
-        'Cartas de felicitación',
-        'Cartas de presentación'
+        'Cláusulas esenciales',
+        'Garantías requeridas',
+        'Plazos y términos',
+        'Penalizaciones y multas'
       ]
     }
   ];
@@ -90,10 +94,10 @@ const RedactorCartas: React.FC<RedactorCartasProps> = ({ usuario }) => {
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Redactor de Cartas Oficiales
+          Revisión de Contratos Municipales
         </h2>
         <p className="text-gray-600">
-          Redacta cartas oficiales con protocolo diplomático y ceremonial apropiado
+          Revisa contratos municipales verificando cumplimiento legal y cláusulas esenciales
         </p>
       </div>
 

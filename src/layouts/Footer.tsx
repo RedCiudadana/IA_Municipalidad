@@ -120,7 +120,7 @@ const Footer: React.FC = () => {
 
             <div className="pt-4 border-t border-white/10">
               <p className="text-xs text-gray-400">
-                Un proyecto de <span className="font-semibold text-white">SEGEPLAN</span> y{' '}
+                Un proyecto de <span className="font-semibold text-white">Municipalidad de Guatemala</span> y{' '}
                 <span className="font-semibold text-white">Red Ciudadana</span>
               </p>
             </div>
@@ -136,7 +136,7 @@ const Footer: React.FC = () => {
                 <div>
                   <p className="text-sm font-semibold text-white mb-1">Dirección</p>
                   <p className="text-sm text-gray-300">
-                    Zona 10, Ciudad de Guatemala, Guatemala
+                    21 calle 6-77, Zona 1, Ciudad de Guatemala
                   </p>
                 </div>
               </div>
@@ -146,10 +146,10 @@ const Footer: React.FC = () => {
                 <div>
                   <p className="text-sm font-semibold text-white mb-1">Correo Electrónico</p>
                   <a
-                    href="mailto:info@redciudadana.org.gt"
+                    href="mailto:juridico@muniguate.gob.gt"
                     className="text-sm text-gray-300 hover:text-white transition-colors"
                   >
-                    info@redciudadana.org.gt
+                    juridico@muniguate.gob.gt
                   </a>
                 </div>
               </div>
@@ -171,11 +171,9 @@ const Footer: React.FC = () => {
         <div className="mt-12 pt-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
             <div className="flex items-center space-x-6">
-              <img
-                src="https://datos.segeplan.gob.gt/uploads/admin/2024-06-04-213946.470432PAGINA-DATOS-ABIERTOS-13.png"
-                alt="SEGEPLAN"
-                className="h-8 w-auto object-contain filter brightness-0 invert"
-              />
+              <div className="text-white font-bold text-lg">
+                Municipalidad de Guatemala
+              </div>
               <span className="text-gray-400 text-xl">×</span>
               <img
                 src="https://datos.segeplan.gob.gt/img/redciudadana-logo.png"
@@ -185,7 +183,7 @@ const Footer: React.FC = () => {
             </div>
 
             <p className="text-sm text-gray-400">
-              © 2025 AIGP-SEGEPLAN. Proyecto piloto • Gobierno de Guatemala
+              © 2025 IA Jurídico Municipal. Departamento Jurídico • Municipalidad de Guatemala
             </p>
           </div>
         </div>

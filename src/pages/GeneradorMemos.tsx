@@ -49,7 +49,10 @@ const GeneradorMemos: React.FC<GeneradorMemosProps> = ({ usuario }) => {
       });
       setDefaultOpenAIClient(client);
 
-      const prompt = `Redacta un memorando interno siguiendo los protocolos institucionales de SEGEPLAN con la siguiente información:\n\nPara: ${datos.destinatario}\nCargo: ${datos.cargo_destinatario}\nDepartamento: ${datos.departamento}\nAsunto: ${datos.asunto}\nPrioridad: ${datos.prioridad}\nTipo de memo: ${datos.tipo_memo}\n\nEl documento debe estar firmado por: ${usuario.nombre}, ${usuario.cargo}, SEGEPLAN. Usa un formato profesional y adecuado para un memorando oficial.`;
+      const prompt = `Eres un agente especializado en elaboración de dictámenes jurídicos municipales. Elabora un dictamen legal con:
+      \n\nSolicitante: ${datos.destinatario}\nCargo: ${datos.cargo_destinatario}\nUnidad: ${datos.departamento}\nAsunto: ${datos.asunto}
+      \nPrioridad: ${datos.prioridad}\nTipo: ${datos.tipo_memo}\n\nIncluye: antecedentes, normativa aplicable, análisis jurídico fundamentado,
+      conclusión y recomendaciones. Firma: ${usuario.nombre}, ${usuario.cargo}, Departamento Jurídico - Municipalidad de Guatemala.`;
 
       const agent = new Agent({
         name: "GeneradorMemosIA",
@@ -66,21 +69,21 @@ const GeneradorMemos: React.FC<GeneradorMemosProps> = ({ usuario }) => {
 
   const recursosEspecificos = [
     {
-      categoria: 'Tipos de Memorandos',
+      categoria: 'Estructura de Dictamen',
       items: [
-        'Memorando informativo',
-        'Memorando de solicitud',
-        'Memorando de instrucciones',
-        'Memorando de recordatorio'
+        'Antecedentes del caso',
+        'Normativa aplicable',
+        'Análisis jurídico',
+        'Conclusión y recomendaciones'
       ]
     },
     {
-      categoria: 'Mejores Prácticas',
+      categoria: 'Normativa Base',
       items: [
-        'Claridad en el asunto',
-        'Brevedad y precisión',
-        'Estructura lógica',
-        'Seguimiento adecuado'
+        'Código Municipal',
+        'Ley de Servicio Municipal',
+        'Constitución Política',
+        'Jurisprudencia CC'
       ]
     }
   ];
@@ -89,10 +92,10 @@ const GeneradorMemos: React.FC<GeneradorMemosProps> = ({ usuario }) => {
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Generador de Memos Internos
+          Dictámenes Jurídicos
         </h2>
         <p className="text-gray-600">
-          Crea memorandos internos con formato estandarizado para comunicación interna
+          Elabora dictámenes con análisis de precedentes y fundamentación legal completa
         </p>
       </div>
 
