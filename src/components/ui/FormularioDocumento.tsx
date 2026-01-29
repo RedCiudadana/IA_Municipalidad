@@ -48,8 +48,8 @@ const FormularioDocumento: React.FC<FormularioDocumentoProps> = ({
             onChange={(e) => manejarCambio(campo.nombre, e.target.value)}
             placeholder={campo.placeholder}
             required={campo.requerido}
-            rows={3}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            rows={5}
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y"
           />
         );
       
@@ -87,9 +87,9 @@ const FormularioDocumento: React.FC<FormularioDocumentoProps> = ({
   return (
     <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
       <h3 className="text-2xl font-bold text-gray-800 mb-6">
-        Información del Documento
+        {tipoDocumento === 'búsqueda normativa' ? 'Parámetros de Búsqueda' : 'Información del Documento'}
       </h3>
-      
+
       <form onSubmit={manejarEnvio} className="space-y-6">
         {campos.map(campo => (
           <div key={campo.nombre}>
@@ -125,10 +125,12 @@ const FormularioDocumento: React.FC<FormularioDocumentoProps> = ({
           {cargando ? (
             <>
               <Loader2 className="animate-spin" size={20} />
-              <span>Generando documento...</span>
+              <span>Procesando solicitud...</span>
             </>
           ) : (
-            <span>Generar Documento</span>
+            <span>
+              {tipoDocumento === 'búsqueda normativa' ? 'Iniciar Búsqueda' : 'Generar Documento'}
+            </span>
           )}
         </button>
       </form>
