@@ -83,8 +83,8 @@ const Login: React.FC = () => {
 
   const llenarCredencialesPrueba = () => {
     setFormData({
-      email: 'demo@segeplan.gob.gt',
-      password: 'demo123456',
+      email: 'jherrera@redciudadana.org.gt',
+      password: 'redciudadana',
       nombre: '',
       cargo: ''
     });
@@ -95,11 +95,9 @@ const Login: React.FC = () => {
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center space-x-6 mb-6">
-            <img
-              src="https://datos.segeplan.gob.gt/uploads/admin/2024-06-04-213946.470432PAGINA-DATOS-ABIERTOS-13.png"
-              alt="SEGEPLAN"
-              className="h-16 w-auto object-contain"
-            />
+            <div className="text-white font-bold text-2xl">
+              Municipalidad de Guatemala
+            </div>
             <div className="h-12 w-px bg-white/30"></div>
             <img
               src="https://datos.segeplan.gob.gt/img/redciudadana-logo.png"
@@ -111,12 +109,12 @@ const Login: React.FC = () => {
           <div className="flex items-center justify-center space-x-2 mb-4">
             <Sparkles className="text-blue-400" size={24} />
             <h1 className="text-3xl font-bold text-white">
-              AIGP-SEGEPLAN
+              IA Jurídico Municipal
             </h1>
           </div>
 
           <p className="text-blue-200 text-lg">
-            Asistente Inteligente de Gestión Pública
+            Asistencia Inteligente para el Departamento Jurídico
           </p>
         </div>
 
@@ -166,7 +164,7 @@ const Login: React.FC = () => {
                       type="text"
                       value={formData.cargo}
                       onChange={(e) => manejarCambio('cargo', e.target.value)}
-                      placeholder="Ej: Analista SEGEPLAN"
+                      placeholder="Ej: Abogado Municipal"
                       required
                       className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm"
                     />
@@ -185,7 +183,7 @@ const Login: React.FC = () => {
                   type="email"
                   value={formData.email}
                   onChange={(e) => manejarCambio('email', e.target.value)}
-                  placeholder="correo@segeplan.gob.gt"
+                  placeholder="correo@muniguate.gob.gt"
                   required
                   className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm"
                 />
@@ -264,21 +262,24 @@ const Login: React.FC = () => {
 
           <div className="mt-8 pt-6 border-t border-white/20 text-center">
             <p className="text-blue-200 text-sm">
-              Sistema seguro protegido por SEGEPLAN
+              Sistema seguro - Municipalidad de Guatemala
             </p>
             <p className="text-blue-300 text-xs mt-2">
-              Proyecto piloto 2025 • Gobierno de Guatemala
+              Departamento Jurídico • Proyecto piloto 2025
             </p>
           </div>
         </div>
 
-        <div className="mt-6 text-center">
-          <p className="text-blue-200 text-sm">
-            ¿Problemas para acceder? Contacta al soporte técnico
+        <div className="mt-6 bg-blue-900/30 backdrop-blur-sm rounded-2xl border border-blue-400/20 p-4">
+          <p className="text-blue-200 text-sm font-semibold mb-2">
+            Credenciales de Prueba:
           </p>
-          <p className="text-blue-300 text-xs mt-1">
-            Email: soporte@segeplan.gob.gt • Tel: (502) 2230-0000
-          </p>
+          <div className="space-y-1 text-xs text-blue-300">
+            <p>• jherrera@redciudadana.org.gt</p>
+            <p>• municipalidad@muniguate.gob.gt</p>
+            <p>• admin@muniguate.gob.gt</p>
+            <p className="mt-2 text-blue-200">Contraseña: <span className="font-mono bg-blue-950/50 px-2 py-1 rounded">redciudadana</span></p>
+          </div>
         </div>
       </div>
     </div>
