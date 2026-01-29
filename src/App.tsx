@@ -1,8 +1,7 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import { MainLayout } from './layouts/MainLayout';
-import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Perfil from './pages/Perfil';
 import Tutoriales from './pages/Tutoriales';
@@ -19,19 +18,13 @@ import AnalisisInversion from './pages/AnalisisInversion';
 import NotFound from './pages/NotFound';
 
 function AppRoutes() {
-  const { user, perfil } = useAuth();
-
   const usuario = {
-    nombre: perfil?.nombre || '',
-    cargo: perfil?.cargo || ''
+    nombre: 'Usuario',
+    cargo: 'Funcionario'
   };
 
   return (
     <Routes>
-      <Route path="/login" element={
-        user ? <Navigate to="/" replace /> : <Login />
-      } />
-
       <Route element={
         <ProtectedRoute>
           <MainLayout />
