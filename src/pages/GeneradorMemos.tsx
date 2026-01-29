@@ -2,117 +2,200 @@ import React, { useState } from 'react';
 import FormularioDocumento from '../components/ui/FormularioDocumento';
 import EditorResultado from '../components/ui/EditorResultado';
 import PanelRecursos from '../components/ui/PanelRecursos';
-import { Agent, run, setDefaultOpenAIClient } from "@openai/agents";
-import OpenAI from "openai";
 
 interface GeneradorMemosProps {
   usuario: { nombre: string; cargo: string };
 }
 
-const GeneradorMemos: React.FC<GeneradorMemosProps> = ({ usuario }) => {
+const GeneradorMemos: React.FC<GeneradorMemosProps> = () => {
   const [documento, setDocumento] = useState('');
   const [cargando, setCargando] = useState(false);
 
   const camposFormulario = [
-    { nombre: 'destinatario', etiqueta: 'Para', tipo: 'text' as const, requerido: true },
-    { nombre: 'cargo_destinatario', etiqueta: 'Cargo', tipo: 'text' as const, requerido: true },
-    { nombre: 'departamento', etiqueta: 'Departamento', tipo: 'text' as const, requerido: true },
-    { nombre: 'asunto', etiqueta: 'Asunto', tipo: 'text' as const, requerido: true },
-    { 
-      nombre: 'prioridad', 
-      etiqueta: 'Prioridad', 
-      tipo: 'select' as const, 
-      opciones: ['Normal', 'Alta', 'Urgente'],
-      requerido: true
+    {
+      nombre: 'asunto',
+      etiqueta: 'Asunto del Dictamen',
+      tipo: 'text' as const,
+      requerido: true,
+      placeholder: 'Ej: Legalidad del procedimiento de contratación directa'
     },
-    { 
-      nombre: 'tipo_memo', 
-      etiqueta: 'Tipo de Memo', 
-      tipo: 'select' as const, 
-      opciones: ['Informativo', 'Solicitud', 'Instrucciones', 'Recordatorio'],
-      requerido: true
+    {
+      nombre: 'antecedentes',
+      etiqueta: 'Antecedentes del Caso',
+      tipo: 'textarea' as const,
+      requerido: true,
+      placeholder: 'Describa los hechos relevantes del caso de manera cronológica y objetiva...'
+    },
+    {
+      nombre: 'solicitante',
+      etiqueta: 'Nombre del Solicitante',
+      tipo: 'text' as const,
+      requerido: false,
+      placeholder: 'Nombre de quien solicita el dictamen (opcional)'
+    },
+    {
+      nombre: 'cargo_solicitante',
+      etiqueta: 'Cargo del Solicitante',
+      tipo: 'text' as const,
+      requerido: false,
+      placeholder: 'Cargo o función del solicitante (opcional)'
+    },
+    {
+      nombre: 'departamento',
+      etiqueta: 'Departamento o Unidad',
+      tipo: 'text' as const,
+      requerido: false,
+      placeholder: 'Departamento que solicita el dictamen (opcional)'
+    },
+    {
+      nombre: 'pregunta_juridica',
+      etiqueta: 'Pregunta(s) Jurídica(s) Específica(s)',
+      tipo: 'textarea' as const,
+      requerido: false,
+      placeholder: '¿Qué cuestiones jurídicas específicas deben resolverse? (opcional)'
+    },
+    {
+      nombre: 'normativa_sugerida',
+      etiqueta: 'Normativa Relevante Sugerida',
+      tipo: 'textarea' as const,
+      requerido: false,
+      placeholder: 'Indique leyes, decretos o artículos que considera relevantes (opcional)'
     }
   ];
 
   const manejarGeneracion = async (datos: any) => {
     setCargando(true);
     try {
-      const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-      if (!apiKey) {
-        setDocumento('Error: No está definida la variable VITE_OPENAI_API_KEY');
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+      if (!supabaseUrl || !supabaseAnonKey) {
+        setDocumento('Error: Variables de entorno de Supabase no configuradas');
         setCargando(false);
         return;
       }
-      const client = new OpenAI({
-        apiKey,
-        dangerouslyAllowBrowser: true
-      });
-      setDefaultOpenAIClient(client);
 
-      const prompt = `Eres un agente especializado en elaboración de dictámenes jurídicos municipales. Elabora un dictamen legal con:
-      \n\nSolicitante: ${datos.destinatario}\nCargo: ${datos.cargo_destinatario}\nUnidad: ${datos.departamento}\nAsunto: ${datos.asunto}
-      \nPrioridad: ${datos.prioridad}\nTipo: ${datos.tipo_memo}\n\nIncluye: antecedentes, normativa aplicable, análisis jurídico fundamentado,
-      conclusión y recomendaciones. Firma: ${usuario.nombre}, ${usuario.cargo}, Departamento Jurídico - Municipalidad de Guatemala.`;
+      const apiUrl = `${supabaseUrl}/functions/v1/dictamenes-juridicos`;
 
-      const agent = new Agent({
-        name: "GeneradorMemosIA",
-        model: "gpt-4o-mini",
-        instructions: prompt
+      const requestBody = {
+        asunto: datos.asunto,
+        antecedentes: datos.antecedentes,
+        solicitante: datos.solicitante || undefined,
+        cargo_solicitante: datos.cargo_solicitante || undefined,
+        departamento: datos.departamento || undefined,
+        pregunta_juridica: datos.pregunta_juridica || undefined,
+        normativa_sugerida: datos.normativa_sugerida || undefined,
+        documentos_adjuntos: datos.contenido_libre || undefined
+      };
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${supabaseAnonKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody)
       });
-      const result = await run(agent, "");
-      setDocumento(result.finalOutput ?? 'No se pudo generar el memorando.');
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error al elaborar el dictamen');
+      }
+
+      const data = await response.json();
+      setDocumento(data.resultado || 'No se pudo generar el dictamen jurídico.');
     } catch (err) {
-      setDocumento('Error al generar el memorando.');
+      console.error('Error:', err);
+      setDocumento(`Error al elaborar el dictamen: ${err instanceof Error ? err.message : 'Error desconocido'}`);
     }
     setCargando(false);
   };
 
   const recursosEspecificos = [
     {
-      categoria: 'Estructura de Dictamen',
+      categoria: 'Estructura de Dictamen Jurídico',
       items: [
-        'Antecedentes del caso',
-        'Normativa aplicable',
-        'Análisis jurídico',
-        'Conclusión y recomendaciones'
+        'I. Encabezado (No., Fecha, Para, De, Asunto)',
+        'II. Antecedentes del caso',
+        'III. Planteamiento de cuestión jurídica',
+        'IV. Normativa aplicable (con citas textuales)',
+        'V. Análisis jurídico fundamentado',
+        'VI. Conclusiones (numeradas)',
+        'VII. Recomendaciones',
+        'VIII. Advertencias legales (si aplica)'
       ]
     },
     {
-      categoria: 'Normativa Base',
+      categoria: 'Normativa Frecuente',
       items: [
-        'Código Municipal',
-        'Ley de Servicio Municipal',
-        'Constitución Política',
-        'Jurisprudencia CC'
+        'Constitución Política de Guatemala',
+        'Código Municipal (Decreto 12-2002)',
+        'Ley de Contrataciones (Decreto 57-92)',
+        'Ley de Servicio Municipal (Decreto 1-87)',
+        'Ley de Probidad (Decreto 89-2002)',
+        'Ley Orgánica del Presupuesto'
+      ]
+    },
+    {
+      categoria: 'Fuentes de Fundamentación',
+      items: [
+        'Jurisprudencia Corte de Constitucionalidad',
+        'Dictámenes Procuraduría General',
+        'Criterios Contraloría General de Cuentas',
+        'Doctrina legal guatemalteca',
+        'Principios del derecho administrativo'
       ]
     }
   ];
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Dictámenes Jurídicos
-        </h2>
-        <p className="text-gray-600">
-          Elabora dictámenes con análisis de precedentes y fundamentación legal completa
-        </p>
+      <div className="bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-2xl shadow-xl p-8 text-white">
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <h2 className="text-3xl font-bold mb-3">
+              Agente de Dictámenes Jurídicos Municipales
+            </h2>
+            <p className="text-emerald-100 text-lg leading-relaxed mb-4">
+              Sistema especializado en elaboración de dictámenes jurídicos completos con análisis exhaustivo de precedentes,
+              fundamentación legal rigurosa y estructura profesional. Proporciona opinión jurídica fundamentada en derecho
+              municipal guatemalteco.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <span className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium">
+                Análisis Jurídico Completo
+              </span>
+              <span className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium">
+                Precedentes y Jurisprudencia
+              </span>
+              <span className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium">
+                Citas Normativas Exactas
+              </span>
+              <span className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium">
+                Recomendaciones Legales
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <FormularioDocumento
-            campos={camposFormulario}
-            onGenerar={manejarGeneracion}
-            cargando={cargando}
-            tipoDocumento="memorando"
-          />
+          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">Datos del Dictamen</h3>
+            <FormularioDocumento
+              campos={camposFormulario}
+              onGenerar={manejarGeneracion}
+              cargando={cargando}
+              tipoDocumento="dictamen jurídico"
+            />
+          </div>
 
           {documento && (
             <EditorResultado
               contenido={documento}
               onGuardar={(contenido) => console.log('Guardado:', contenido)}
-              tipoDocumento="memorando"
+              tipoDocumento="dictamen jurídico"
             />
           )}
         </div>
