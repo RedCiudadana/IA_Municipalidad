@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, FileText, File as FileEdit, Mail, ClipboardList, BookOpen, FolderOpen, History, BarChart3, ChevronDown, Menu, X, User } from 'lucide-react';
+import { Home, FileText, File as FileEdit, Mail, ClipboardList, BookOpen, FolderOpen, FileQuestion, ChevronDown, Menu, X, GraduationCap } from 'lucide-react';
 
 const TopNavigation: React.FC = () => {
   const [menuMovilAbierto, setMenuMovilAbierto] = useState(false);
@@ -9,10 +9,8 @@ const TopNavigation: React.FC = () => {
 
   const secciones = [
     { id: 'inicio', titulo: 'Inicio', icono: Home, ruta: '/' },
-    { id: 'perfil', titulo: 'Mi Perfil', icono: User, ruta: '/perfil' },
-    { id: 'tutoriales', titulo: 'Tutoriales', icono: BookOpen, ruta: '/tutoriales' },
-    { id: 'historial', titulo: 'Historial', icono: History, ruta: '/historial' },
-    { id: 'estadisticas', titulo: 'Estadísticas', icono: BarChart3, ruta: '/estadisticas' }
+    { id: 'tutoriales', titulo: 'Tutoriales', icono: GraduationCap, ruta: '/tutoriales' },
+    { id: 'documentacion', titulo: 'Documentación', icono: FileQuestion, ruta: '/documentacion' }
   ];
 
   const agentes = [

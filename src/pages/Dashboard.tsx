@@ -150,10 +150,10 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
                 </div>
                 <div>
                   <h1 className="text-5xl font-bold text-white mb-3">
-                    Bienvenido, {usuario.nombre}
+                    Bienvenido al Sistema de IA Jurídico Municipal
                   </h1>
                   <p className="text-blue-200 text-xl font-semibold">
-                    {usuario.cargo} • Municipalidad de Guatemala
+                    Municipalidad de Guatemala • Departamento Jurídico
                   </p>
                 </div>
               </div>

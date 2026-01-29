@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { HelpCircle, User, Sparkles, Bell, Settings, Facebook, Twitter, Instagram, Youtube, Mail, Phone, LogOut } from 'lucide-react';
+import { HelpCircle, Facebook, Twitter, Instagram, Youtube, Phone } from 'lucide-react';
 import ModalAyuda from '../components/ui/ModalAyuda';
-import LogoSegeplan from '../assets/logo-segeplan.png';
 import LogoRedCiudadana from '../assets/redciudadana-logo.png';
 
 interface HeaderProps {
@@ -10,10 +8,8 @@ interface HeaderProps {
   onCerrarSesion: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ usuario, onCerrarSesion }) => {
+const Header: React.FC<HeaderProps> = () => {
   const [mostrarAyuda, setMostrarAyuda] = useState(false);
-  const [menuUsuarioAbierto, setMenuUsuarioAbierto] = useState(false);
-  const navigate = useNavigate();
 
   return (
     <React.Fragment>
@@ -100,75 +96,17 @@ const Header: React.FC<HeaderProps> = ({ usuario, onCerrarSesion }) => {
               {/* Espacio flexible */}
               <div className="flex-1"></div>
 
-              {/* Área derecha con usuario y Red Ciudadana */}
+              {/* Área derecha */}
               <div className="flex items-center space-x-4">
                 {/* Ayuda */}
                 <button
                   onClick={() => setMostrarAyuda(true)}
-                  className="p-3 rounded-xl hover:bg-white/10 transition-all duration-200 text-white"
+                  className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-200 text-white"
                   title="Ayuda"
                 >
-                  <HelpCircle size={22} />
+                  <HelpCircle size={20} />
+                  <span className="hidden md:inline text-sm font-medium">Ayuda</span>
                 </button>
-
-                {/* Usuario */}
-                <div className="relative">
-                  <button
-                    onClick={() => setMenuUsuarioAbierto(!menuUsuarioAbierto)}
-                    className="flex items-center space-x-3 p-2 rounded-xl hover:bg-white/10 transition-all duration-200"
-                  >
-                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
-                      <User size={20} className="text-white" />
-                    </div>
-                    <div className="hidden md:block text-left">
-                      <p className="text-white font-semibold">{usuario.nombre}</p>
-                      <p className="text-slate-300 text-sm">{usuario.cargo}</p>
-                    </div>
-                  </button>
-
-                  {menuUsuarioAbierto && (
-                    <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 z-50">
-                      <div className="px-4 py-3 border-b border-gray-200">
-                        <p className="font-semibold text-gray-800">{usuario.nombre}</p>
-                        <p className="text-gray-600 text-sm">{usuario.cargo}</p>
-                      </div>
-                      <button
-                        onClick={() => {
-                          setMenuUsuarioAbierto(false);
-                          navigate('/perfil');
-                        }}
-                        className="w-full flex items-center space-x-3 px-4 py-3 text-left text-gray-700 hover:bg-gray-50 transition-colors"
-                      >
-                        <User size={18} />
-                        <span>Mi Perfil</span>
-                      </button>
-                      <button
-                        onClick={() => {
-                          setMenuUsuarioAbierto(false);
-                          navigate('/perfil');
-                        }}
-                        className="w-full flex items-center space-x-3 px-4 py-3 text-left text-gray-700 hover:bg-gray-50 transition-colors"
-                      >
-                        <Settings size={18} />
-                        <span>Configuración</span>
-                      </button>
-                      <div className="border-t border-gray-200 mt-2 pt-2">
-                        <button
-                          onClick={() => {
-                            setMenuUsuarioAbierto(false);
-                            if (window.confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-                              onCerrarSesion();
-                            }
-                          }}
-                          className="w-full flex items-center space-x-3 px-4 py-3 text-left text-red-600 hover:bg-red-50 transition-colors"
-                        >
-                          <LogOut size={18} />
-                          <span>Cerrar Sesión</span>
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
               </div>
             </div>
           </div>
