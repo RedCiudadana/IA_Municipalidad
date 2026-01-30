@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, Filter, BookOpen, Calendar, Tag, Eye, ExternalLink, FileText, ChevronDown, ChevronUp, X, Download, Sparkles } from 'lucide-react';
+import { Search, Filter, BookOpen, Calendar, Tag, Eye, ExternalLink, FileText, ChevronDown, ChevronUp, X, Download, Sparkles, Lightbulb, TrendingUp } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -41,6 +41,16 @@ interface DocumentoJuridico {
   categoria?: Categoria;
 }
 
+interface AnalisisBusqueda {
+  analisis: string;
+  categorias_sugeridas: string[];
+  tipos_documento_sugeridos: string[];
+  palabras_clave: string[];
+  temas_relacionados: string[];
+  sugerencia_busqueda: string;
+  documentos_sugeridos: DocumentoJuridico[];
+}
+
 export default function BibliotecaJuridica() {
   const { user } = useAuth();
   const [documentos, setDocumentos] = useState<DocumentoJuridico[]>([]);
@@ -54,6 +64,9 @@ export default function BibliotecaJuridica() {
   const [tipoFiltro, setTipoFiltro] = useState<string>('');
   const [vigenteFiltro, setVigenteFiltro] = useState<string>('todos');
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
+  const [analisisIA, setAnalisisIA] = useState<AnalisisBusqueda | null>(null);
+  const [loadingAnalisis, setLoadingAnalisis] = useState(false);
+  const [mostrarAnalisis, setMostrarAnalisis] = useState(false);
 
   useEffect(() => {
     cargarDatosIniciales();
@@ -150,6 +163,43 @@ export default function BibliotecaJuridica() {
     setCategoriaFiltro('');
     setTipoFiltro('');
     setVigenteFiltro('todos');
+    setAnalisisIA(null);
+    setMostrarAnalisis(false);
+  };
+
+  const analizarBusqueda = async () => {
+    if (!terminoBusqueda.trim()) return;
+
+    setLoadingAnalisis(true);
+    try {
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/analizar-busqueda-biblioteca`;
+      const headers = {
+        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+      };
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          consulta: terminoBusqueda,
+          tipo_documento: tipoFiltro,
+          categoria: categoriaFiltro
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al analizar búsqueda');
+      }
+
+      const data = await response.json();
+      setAnalisisIA(data);
+      setMostrarAnalisis(true);
+    } catch (error) {
+      console.error('Error en análisis:', error);
+    } finally {
+      setLoadingAnalisis(false);
+    }
   };
 
   const getCategoriaColor = (color: string) => {
@@ -200,6 +250,14 @@ export default function BibliotecaJuridica() {
               <Filter size={20} />
               <span>Filtros</span>
               {mostrarFiltros ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+            </button>
+            <button
+              onClick={analizarBusqueda}
+              disabled={!terminoBusqueda.trim() || loadingAnalisis}
+              className="flex items-center justify-center space-x-2 px-8 py-3 gradient-primary text-white rounded-xl transition-all font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Sparkles size={20} />
+              <span>{loadingAnalisis ? 'Analizando...' : 'Analizar con IA'}</span>
             </button>
           </div>
 
@@ -260,6 +318,136 @@ export default function BibliotecaJuridica() {
             </div>
           )}
         </div>
+
+        {mostrarAnalisis && analisisIA && (
+          <div className="card p-8 mb-8 border-2 border-teal-200 bg-gradient-to-br from-teal-50/50 to-white">
+            <div className="flex items-start justify-between mb-6">
+              <div className="flex items-center space-x-3">
+                <div className="w-12 h-12 gradient-primary rounded-xl flex items-center justify-center">
+                  <Lightbulb size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-neutral-900">Análisis Inteligente de Búsqueda</h3>
+                  <p className="text-neutral-600 text-sm mt-1">Sugerencias basadas en IA para mejorar tu búsqueda</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setMostrarAnalisis(false)}
+                className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="bg-white rounded-xl p-6 mb-6 border border-teal-100">
+              <p className="text-neutral-700 leading-relaxed text-lg">{analisisIA.analisis}</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              {analisisIA.categorias_sugeridas.length > 0 && (
+                <div>
+                  <h4 className="font-bold text-neutral-900 mb-3 flex items-center space-x-2">
+                    <Tag size={18} className="text-teal-600" />
+                    <span>Categorías Sugeridas</span>
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {analisisIA.categorias_sugeridas.map((cat, idx) => (
+                      <span key={idx} className="px-3 py-1.5 bg-teal-100 text-teal-700 rounded-lg text-sm font-semibold">
+                        {cat}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {analisisIA.tipos_documento_sugeridos.length > 0 && (
+                <div>
+                  <h4 className="font-bold text-neutral-900 mb-3 flex items-center space-x-2">
+                    <FileText size={18} className="text-orange-600" />
+                    <span>Tipos de Documento</span>
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {analisisIA.tipos_documento_sugeridos.map((tipo, idx) => (
+                      <span key={idx} className="px-3 py-1.5 bg-orange-100 text-orange-700 rounded-lg text-sm font-semibold">
+                        {tipo}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {analisisIA.palabras_clave.length > 0 && (
+                <div>
+                  <h4 className="font-bold text-neutral-900 mb-3 flex items-center space-x-2">
+                    <Search size={18} className="text-cyan-600" />
+                    <span>Palabras Clave</span>
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {analisisIA.palabras_clave.map((palabra, idx) => (
+                      <span key={idx} className="px-3 py-1.5 bg-cyan-100 text-cyan-700 rounded-lg text-sm font-medium">
+                        {palabra}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {analisisIA.temas_relacionados.length > 0 && (
+                <div>
+                  <h4 className="font-bold text-neutral-900 mb-3 flex items-center space-x-2">
+                    <TrendingUp size={18} className="text-emerald-600" />
+                    <span>Temas Relacionados</span>
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {analisisIA.temas_relacionados.map((tema, idx) => (
+                      <span key={idx} className="px-3 py-1.5 bg-emerald-100 text-emerald-700 rounded-lg text-sm font-medium">
+                        {tema}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {analisisIA.documentos_sugeridos && analisisIA.documentos_sugeridos.length > 0 && (
+              <div className="mt-6 pt-6 border-t border-teal-100">
+                <h4 className="font-bold text-neutral-900 mb-4 flex items-center space-x-2">
+                  <Sparkles size={20} className="text-teal-600" />
+                  <span>Documentos Recomendados</span>
+                </h4>
+                <div className="space-y-3">
+                  {analisisIA.documentos_sugeridos.map((doc) => (
+                    <div
+                      key={doc.id}
+                      onClick={() => abrirDocumento(doc)}
+                      className="p-4 bg-white border border-neutral-200 rounded-xl hover:border-teal-300 hover:shadow-md transition-all cursor-pointer"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <span className="badge-primary text-xs px-2 py-1">
+                              {doc.numero_documento}
+                            </span>
+                            <span className="text-xs text-neutral-500 font-medium">
+                              {doc.tipo_documento?.nombre}
+                            </span>
+                          </div>
+                          <h5 className="font-bold text-neutral-900 mb-1">{doc.titulo}</h5>
+                          <p className="text-sm text-neutral-600 line-clamp-2">{doc.resumen_ejecutivo}</p>
+                        </div>
+                        <div className="ml-4">
+                          <Eye size={16} className="text-neutral-400" />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="card p-8">
           <div className="flex items-center justify-between mb-8">
