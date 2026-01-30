@@ -15,6 +15,7 @@ import RedactorCartas from './pages/RedactorCartas';
 import AsistenteMinutas from './pages/AsistenteMinutas';
 import ResumenExpedientes from './pages/ResumenExpedientes';
 import AnalisisInversion from './pages/AnalisisInversion';
+import BibliotecaJuridica from './pages/BibliotecaJuridica';
 import NotFound from './pages/NotFound';
 
 function AppRoutes() {
@@ -44,6 +45,8 @@ function AppRoutes() {
         <Route path="/agentes/minutas" element={<AsistenteMinutas usuario={usuario} />} />
         <Route path="/agentes/resumenes" element={<ResumenExpedientes usuario={usuario} />} />
         <Route path="/agentes/analisis" element={<AnalisisInversion usuario={usuario} />} />
+
+        <Route path="/biblioteca-juridica" element={<BibliotecaJuridica />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />

@@ -279,7 +279,92 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
           </div>
         </div>
       </section>
-      
+
+      {/* Biblioteca Jurídica Section - Featured */}
+      <section className="relative overflow-hidden">
+        <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 rounded-3xl shadow-2xl overflow-hidden">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute inset-0" style={{backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)", backgroundSize: "30px 30px"}}></div>
+          </div>
+          <div className="relative p-12">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+              <div className="flex-1">
+                <div className="flex items-center space-x-4 mb-6">
+                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-xl">
+                    <FolderSearch size={32} className="text-white" />
+                  </div>
+                  <h2 className="text-4xl font-bold text-white">
+                    Biblioteca Jurídica Municipal
+                  </h2>
+                </div>
+                <p className="text-white/90 text-xl leading-relaxed mb-6 max-w-2xl">
+                  Accede al repositorio de precedentes administrativos municipales. Consulta acuerdos,
+                  opiniones técnicas, dictámenes y lineamientos para fortalecer tus argumentos jurídicos
+                  basándote en resoluciones previas.
+                </p>
+                <div className="flex flex-wrap gap-4 mb-6">
+                  <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2">
+                    <FileText size={20} className="text-white" />
+                    <span className="text-white font-medium">Acuerdos Municipales</span>
+                  </div>
+                  <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2">
+                    <ScrollText size={20} className="text-white" />
+                    <span className="text-white font-medium">Opiniones Técnicas</span>
+                  </div>
+                  <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2">
+                    <FileCheck size={20} className="text-white" />
+                    <span className="text-white font-medium">Dictámenes Legales</span>
+                  </div>
+                  <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2">
+                    <BookOpen size={20} className="text-white" />
+                    <span className="text-white font-medium">Lineamientos</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex-shrink-0">
+                <button
+                  onClick={() => navigate('/biblioteca-juridica')}
+                  className="group/btn bg-white hover:bg-gray-50 text-blue-700 px-8 py-4 rounded-2xl transition-all duration-300 font-bold text-lg shadow-2xl flex items-center space-x-3 transform hover:scale-105"
+                >
+                  <span>Explorar Biblioteca</span>
+                  <ArrowRight size={24} className="group-hover/btn:translate-x-2 transition-transform duration-300" strokeWidth={3} />
+                </button>
+                <p className="text-white/70 text-sm mt-3 text-center">Búsqueda inteligente de precedentes</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                    <FolderSearch size={20} className="text-white" />
+                  </div>
+                  <h3 className="text-white font-bold text-lg">Búsqueda Avanzada</h3>
+                </div>
+                <p className="text-white/80">Filtra por categoría, tipo de documento, fecha y palabras clave</p>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                    <TrendingUp size={20} className="text-white" />
+                  </div>
+                  <h3 className="text-white font-bold text-lg">Documentos Relevantes</h3>
+                </div>
+                <p className="text-white/80">Accede a los documentos más consultados y de mayor relevancia</p>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                    <Shield size={20} className="text-white" />
+                  </div>
+                  <h3 className="text-white font-bold text-lg">Historial de Casos</h3>
+                </div>
+                <p className="text-white/80">Consulta cómo se resolvieron casos similares anteriormente</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Agents Section - Enhanced */}
       <section>
         <div className="text-center mb-12">
