@@ -11,7 +11,6 @@ import {
   Sparkles,
   Clock,
   Shield,
-  Target,
   Send,
   ScrollText,
   FileCheck,
@@ -110,33 +109,6 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
     }
   ];
 
-  const beneficios = [
-    {
-      icono: Clock,
-      titulo: 'Eficiencia Operativa',
-      descripcion: 'Reduce tiempo de análisis jurídico entre 40-60%',
-      color: 'text-teal-600'
-    },
-    {
-      icono: Shield,
-      titulo: 'Seguridad Jurídica',
-      descripcion: 'Garantiza cumplimiento de normativa municipal y constitucional',
-      color: 'text-teal-700'
-    },
-    {
-      icono: Target,
-      titulo: 'Precisión Legal',
-      descripcion: 'Análisis consistente con fundamentación jurídica correcta',
-      color: 'text-orange-600'
-    },
-    {
-      icono: Sparkles,
-      titulo: 'IA Especializada',
-      descripcion: 'Agentes entrenados en derecho municipal guatemalteco',
-      color: 'text-orange-700'
-    }
-  ];
-
   return (
     <div className="space-y-16">
       <section className="relative">
@@ -161,27 +133,10 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
                 </div>
               </div>
 
-              <p className="text-white/90 text-xl lg:text-2xl leading-relaxed mb-10 max-w-4xl">
+              <p className="text-white/90 text-xl lg:text-2xl leading-relaxed max-w-4xl">
                 Herramientas inteligentes para análisis legales, dictámenes, contratos y procedimientos
                 administrativos especializadas en derecho municipal guatemalteco.
               </p>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {beneficios.map((beneficio, index) => {
-                  const IconoComponente = beneficio.icono;
-                  return (
-                    <div key={index} className="flex items-start space-x-5 bg-white/10 backdrop-blur-md rounded-2xl p-7 hover:bg-white/15 transition-all duration-300">
-                      <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <IconoComponente size={28} className="text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-white font-bold text-xl mb-2">{beneficio.titulo}</h3>
-                        <p className="text-white/80 text-base leading-relaxed">{beneficio.descripcion}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
             </div>
           </div>
         </div>
