@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { User, Lock, Eye, EyeOff, LogIn, Sparkles, Shield, Scale, AlertCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import LogoRedCiudadana from '../assets/redciudadana-logo.png';
 
 const Login: React.FC = () => {
-  const { signIn } = useAuth();
+  const { signIn, user, loading } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -12,6 +14,12 @@ const Login: React.FC = () => {
   const [mostrarPassword, setMostrarPassword] = useState(false);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (!loading && user) {
+      navigate('/');
+    }
+  }, [user, loading, navigate]);
 
   const manejarCambio = (campo: string, valor: string) => {
     setFormData(prev => ({
@@ -30,9 +38,10 @@ const Login: React.FC = () => {
 
     if (error) {
       setError(error.message || 'Error al iniciar sesión');
+      setCargando(false);
+    } else {
+      navigate('/');
     }
-
-    setCargando(false);
   };
 
   const llenarCredencialesDemo = () => {
@@ -42,6 +51,17 @@ const Login: React.FC = () => {
     });
     setError('');
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen gradient-neutral flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-teal-400 mx-auto mb-6"></div>
+          <p className="text-white text-lg font-medium">Cargando...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen gradient-neutral flex items-center justify-center p-4">
