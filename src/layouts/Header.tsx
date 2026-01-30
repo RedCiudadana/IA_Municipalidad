@@ -14,25 +14,25 @@ const Header: React.FC<HeaderProps> = () => {
   return (
     <React.Fragment>
       {/* Top Bar with Social Media and Contact */}
-      <div className="bg-slate-700 text-white py-2">
+      <div className="bg-neutral-800 text-white py-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2">
-                <Phone size={14} />
+                <Phone size={16} />
               </div>
             {/* Espacio flexible */}
             <div className="flex-1"></div>
             </div>
-            
+
             <div className="flex items-center space-x-4">
-              <span className="text-slate-300">Síguenos:</span>
+              <span className="text-neutral-300 font-medium">Síguenos:</span>
               <div className="flex items-center space-x-3">
                 <a
                   href="https://www.facebook.com/MuniGuate"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1 rounded hover:bg-slate-600 transition-colors"
+                  className="p-2 rounded-lg hover:bg-neutral-700 transition-all"
                   title="Facebook Municipalidad de Guatemala"
                 >
                   <Facebook size={16} />
@@ -41,7 +41,7 @@ const Header: React.FC<HeaderProps> = () => {
                   href="https://twitter.com/MuniGuate"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1 rounded hover:bg-slate-600 transition-colors"
+                  className="p-2 rounded-lg hover:bg-neutral-700 transition-all"
                   title="Twitter Municipalidad de Guatemala"
                 >
                   <Twitter size={16} />
@@ -50,7 +50,7 @@ const Header: React.FC<HeaderProps> = () => {
                   href="https://www.instagram.com/muniguate"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1 rounded hover:bg-slate-600 transition-colors"
+                  className="p-2 rounded-lg hover:bg-neutral-700 transition-all"
                   title="Instagram Municipalidad de Guatemala"
                 >
                   <Instagram size={16} />
@@ -59,7 +59,7 @@ const Header: React.FC<HeaderProps> = () => {
                   href="https://www.youtube.com/@MuniGuate"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1 rounded hover:bg-slate-600 transition-colors"
+                  className="p-2 rounded-lg hover:bg-neutral-700 transition-all"
                   title="YouTube Municipalidad de Guatemala"
                 >
                   <Youtube size={16} />
@@ -69,26 +69,26 @@ const Header: React.FC<HeaderProps> = () => {
           </div>
         </div>
       </div>
-      <header className="bg-gradient-to-r from-slate-800 to-slate-900 text-white shadow-2xl sticky top-0 z-50 backdrop-blur-sm">
+      <header className="gradient-neutral text-white shadow-2xl sticky top-0 z-50 backdrop-blur-sm">
         <>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-24">
+            <div className="flex items-center justify-between h-28">
               {/* Logos Municipalidad de Guatemala y Red Ciudadana */}
               <div className="flex items-center space-x-8">
                 <div className="flex items-center space-x-3">
                   <div className="text-white">
-                    <h1 className="text-xl font-bold">Municipalidad de Guatemala</h1>
-                    <p className="text-sm text-slate-300">Departamento Jurídico</p>
+                    <h1 className="text-2xl font-bold tracking-tight">Municipalidad de Guatemala</h1>
+                    <p className="text-base text-teal-200 font-medium">Departamento Jurídico</p>
                   </div>
                 </div>
 
-                <div className="h-12 w-px bg-slate-600"></div>
+                <div className="h-14 w-px bg-neutral-600"></div>
 
                 <div className="flex items-center space-x-3">
                   <img
                     src={LogoRedCiudadana}
                     alt="Red Ciudadana"
-                    className="h-12 w-auto object-contain"
+                    className="h-14 w-auto object-contain"
                   />
                 </div>
               </div>
@@ -101,11 +101,11 @@ const Header: React.FC<HeaderProps> = () => {
                 {/* Ayuda */}
                 <button
                   onClick={() => setMostrarAyuda(true)}
-                  className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-200 text-white"
+                  className="flex items-center space-x-2 px-6 py-3 rounded-xl bg-white/15 hover:bg-white/25 transition-all duration-200 text-white font-semibold shadow-lg"
                   title="Ayuda"
                 >
-                  <HelpCircle size={20} />
-                  <span className="hidden md:inline text-sm font-medium">Ayuda</span>
+                  <HelpCircle size={22} />
+                  <span className="hidden md:inline">Ayuda</span>
                 </button>
               </div>
             </div>
