@@ -1,21 +1,26 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import Header from './Header';
 import TopNavigation from './TopNavigation';
 import Footer from './Footer';
 import ScrollToTop from './scrolltotop';
 
 export const MainLayout = () => {
+  const { perfil, signOut } = useAuth();
+  const navigate = useNavigate();
+
   const usuario = {
-    nombre: 'Usuario',
-    cargo: 'Funcionario'
+    nombre: perfil?.nombre || 'Usuario',
+    cargo: perfil?.cargo || 'Funcionario'
   };
 
-  const manejarCerrarSesion = () => {
-    console.log('Cerrar sesión deshabilitado temporalmente');
+  const manejarCerrarSesion = async () => {
+    await signOut();
+    navigate('/login');
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-teal-50/20 to-neutral-50 flex flex-col">
       <ScrollToTop />
       <Header usuario={usuario} onCerrarSesion={manejarCerrarSesion} />
       <TopNavigation />

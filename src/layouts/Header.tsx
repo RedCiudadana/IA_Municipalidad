@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HelpCircle, Facebook, Twitter, Instagram, Youtube, Phone } from 'lucide-react';
+import { HelpCircle, Facebook, Twitter, Instagram, Youtube, Phone, LogOut } from 'lucide-react';
 import ModalAyuda from '../components/ui/ModalAyuda';
 import LogoRedCiudadana from '../assets/redciudadana-logo.png';
 
@@ -8,7 +8,7 @@ interface HeaderProps {
   onCerrarSesion: () => void;
 }
 
-const Header: React.FC<HeaderProps> = () => {
+const Header: React.FC<HeaderProps> = ({ onCerrarSesion }) => {
   const [mostrarAyuda, setMostrarAyuda] = useState(false);
 
   return (
@@ -106,6 +106,16 @@ const Header: React.FC<HeaderProps> = () => {
                 >
                   <HelpCircle size={22} />
                   <span className="hidden md:inline">Ayuda</span>
+                </button>
+
+                {/* Cerrar Sesión */}
+                <button
+                  onClick={onCerrarSesion}
+                  className="flex items-center space-x-2 px-6 py-3 rounded-xl bg-orange-500/20 hover:bg-orange-500/30 border border-orange-400/30 transition-all duration-200 text-white font-semibold shadow-lg"
+                  title="Cerrar Sesión"
+                >
+                  <LogOut size={22} />
+                  <span className="hidden md:inline">Salir</span>
                 </button>
               </div>
             </div>

@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
-import { User, Lock, Eye, EyeOff, LogIn, Sparkles, Shield, Info, Mail, UserPlus } from 'lucide-react';
+import { User, Lock, Eye, EyeOff, LogIn, Sparkles, Shield, Scale, AlertCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import LogoRedCiudadana from '../assets/redciudadana-logo.png';
 
 const Login: React.FC = () => {
-  const { signIn, signUp } = useAuth();
-  const [modo, setModo] = useState<'login' | 'registro'>('login');
+  const { signIn } = useAuth();
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    nombre: '',
-    cargo: ''
+    username: '',
+    password: ''
   });
   const [mostrarPassword, setMostrarPassword] = useState(false);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState('');
-  const [mensaje, setMensaje] = useState('');
 
   const manejarCambio = (campo: string, valor: string) => {
     setFormData(prev => ({
@@ -22,7 +19,6 @@ const Login: React.FC = () => {
       [campo]: valor
     }));
     if (error) setError('');
-    if (mensaje) setMensaje('');
   };
 
   const manejarLogin = async (e: React.FormEvent) => {
@@ -30,256 +26,183 @@ const Login: React.FC = () => {
     setCargando(true);
     setError('');
 
-    const { error } = await signIn(formData.email, formData.password);
+    const { error } = await signIn(formData.username, formData.password);
 
     if (error) {
-      if (error.message.includes('Invalid login credentials')) {
-        setError('Correo o contraseña incorrectos');
-      } else if (error.message.includes('Email not confirmed')) {
-        setError('Por favor confirma tu correo electrónico');
-      } else {
-        setError(error.message || 'Error al iniciar sesión');
-      }
+      setError(error.message || 'Error al iniciar sesión');
     }
 
     setCargando(false);
   };
 
-  const manejarRegistro = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setCargando(true);
-    setError('');
-    setMensaje('');
-
-    if (!formData.nombre || !formData.cargo) {
-      setError('Por favor completa todos los campos');
-      setCargando(false);
-      return;
-    }
-
-    const { error } = await signUp(formData.email, formData.password, formData.nombre, formData.cargo);
-
-    if (error) {
-      if (error.message.includes('already registered')) {
-        setError('Este correo ya está registrado');
-      } else if (error.message.includes('Password')) {
-        setError('La contraseña debe tener al menos 6 caracteres');
-      } else {
-        setError(error.message || 'Error al crear cuenta');
-      }
-    } else {
-      setMensaje('Cuenta creada exitosamente. Por favor inicia sesión.');
-      setModo('login');
-      setFormData({
-        email: formData.email,
-        password: '',
-        nombre: '',
-        cargo: ''
-      });
-    }
-
-    setCargando(false);
-  };
-
-  const llenarCredencialesPrueba = () => {
+  const llenarCredencialesDemo = () => {
     setFormData({
-      email: 'jherrera@redciudadana.org.gt',
-      password: 'redciudadana',
-      nombre: '',
-      cargo: ''
+      username: 'redciudadana',
+      password: 'redciudadana'
     });
+    setError('');
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4">
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-6 mb-6">
+    <div className="min-h-screen gradient-neutral flex items-center justify-center p-4">
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0" style={{backgroundImage: "radial-gradient(circle, white 1.5px, transparent 1.5px)", backgroundSize: "32px 32px"}}></div>
+      </div>
+
+      <div className="max-w-md w-full relative z-10">
+        <div className="text-center mb-10">
+          <div className="flex items-center justify-center space-x-6 mb-8">
             <div className="text-white font-bold text-2xl">
               Municipalidad de Guatemala
             </div>
             <div className="h-12 w-px bg-white/30"></div>
             <img
-              src="https://datos.segeplan.gob.gt/img/redciudadana-logo.png"
+              src={LogoRedCiudadana}
               alt="Red Ciudadana"
               className="h-12 w-auto object-contain"
             />
           </div>
 
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <Sparkles className="text-blue-400" size={24} />
-            <h1 className="text-3xl font-bold text-white">
+          <div className="flex items-center justify-center space-x-3 mb-4">
+            <div className="w-14 h-14 gradient-accent rounded-2xl flex items-center justify-center shadow-xl">
+              <Scale size={28} className="text-white" />
+            </div>
+            <h1 className="text-4xl font-bold text-white tracking-tight">
               IA Jurídico Municipal
             </h1>
           </div>
 
-          <p className="text-blue-200 text-lg">
+          <p className="text-teal-100 text-xl font-medium">
             Asistencia Inteligente para el Departamento Jurídico
           </p>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border border-white/20">
-          <div className="text-center mb-6">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Shield size={32} className="text-white" />
+        <div className="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/20">
+          <div className="text-center mb-8">
+            <div className="w-20 h-20 gradient-primary rounded-3xl flex items-center justify-center mx-auto mb-5 shadow-xl">
+              <Shield size={36} className="text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-2">
-              {modo === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'}
+            <h2 className="text-3xl font-bold text-white mb-3">
+              Acceso al Sistema
             </h2>
-            <p className="text-blue-200">
-              {modo === 'login'
-                ? 'Accede al sistema con tus credenciales institucionales'
-                : 'Regístrate para acceder al sistema'}
+            <p className="text-teal-100 text-base">
+              Ingresa tus credenciales para continuar
             </p>
           </div>
 
-
-          <form onSubmit={modo === 'login' ? manejarLogin : manejarRegistro} className="space-y-6">
-            {modo === 'registro' && (
-              <>
-                <div>
-                  <label className="block text-white font-medium mb-2">
-                    Nombre Completo
-                  </label>
-                  <div className="relative">
-                    <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                    <input
-                      type="text"
-                      value={formData.nombre}
-                      onChange={(e) => manejarCambio('nombre', e.target.value)}
-                      placeholder="Ingresa tu nombre completo"
-                      required
-                      className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-white font-medium mb-2">
-                    Cargo
-                  </label>
-                  <div className="relative">
-                    <Shield className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                    <input
-                      type="text"
-                      value={formData.cargo}
-                      onChange={(e) => manejarCambio('cargo', e.target.value)}
-                      placeholder="Ej: Abogado Municipal"
-                      required
-                      className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm"
-                    />
-                  </div>
-                </div>
-              </>
-            )}
-
+          <form onSubmit={manejarLogin} className="space-y-6">
             <div>
-              <label className="block text-white font-medium mb-2">
-                Correo Electrónico
+              <label className="block text-white font-semibold mb-3">
+                Usuario
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral-300" size={22} />
                 <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => manejarCambio('email', e.target.value)}
-                  placeholder="correo@muniguate.gob.gt"
+                  type="text"
+                  value={formData.username}
+                  onChange={(e) => manejarCambio('username', e.target.value)}
+                  placeholder="Ingresa tu usuario"
                   required
-                  className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm"
+                  className="w-full pl-12 pr-4 py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-neutral-300 focus:ring-2 focus:ring-teal-400 focus:border-teal-400 backdrop-blur-sm transition-all text-base font-medium"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-white font-medium mb-2">
+              <label className="block text-white font-semibold mb-3">
                 Contraseña
               </label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral-300" size={22} />
                 <input
                   type={mostrarPassword ? 'text' : 'password'}
                   value={formData.password}
                   onChange={(e) => manejarCambio('password', e.target.value)}
-                  placeholder={modo === 'registro' ? 'Mínimo 6 caracteres' : 'Ingresa tu contraseña'}
+                  placeholder="Ingresa tu contraseña"
                   required
-                  className="w-full pl-12 pr-12 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm"
+                  className="w-full pl-12 pr-14 py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-neutral-300 focus:ring-2 focus:ring-teal-400 focus:border-teal-400 backdrop-blur-sm transition-all text-base font-medium"
                 />
                 <button
                   type="button"
                   onClick={() => setMostrarPassword(!mostrarPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-neutral-300 hover:text-white transition-colors"
                 >
-                  {mostrarPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {mostrarPassword ? <EyeOff size={22} /> : <Eye size={22} />}
                 </button>
               </div>
             </div>
 
             {error && (
-              <div className="bg-red-500/20 border border-red-400/30 rounded-xl p-3">
-                <p className="text-red-200 text-sm text-center">{error}</p>
-              </div>
-            )}
-
-            {mensaje && (
-              <div className="bg-green-500/20 border border-green-400/30 rounded-xl p-3">
-                <p className="text-green-200 text-sm text-center">{mensaje}</p>
+              <div className="bg-red-500/20 border-2 border-red-400/30 rounded-xl p-4 backdrop-blur-sm">
+                <div className="flex items-center space-x-3">
+                  <AlertCircle className="text-red-300 flex-shrink-0" size={22} />
+                  <p className="text-red-100 text-sm font-medium">{error}</p>
+                </div>
               </div>
             )}
 
             <button
               type="submit"
               disabled={cargando}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-4 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-3 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none"
+              className="w-full gradient-primary hover:shadow-2xl text-white px-6 py-4 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-3 font-bold text-lg shadow-xl transform hover:scale-105 disabled:transform-none"
             >
               {cargando ? (
                 <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  <span>{modo === 'login' ? 'Iniciando sesión...' : 'Creando cuenta...'}</span>
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                  <span>Iniciando sesión...</span>
                 </>
               ) : (
                 <>
-                  {modo === 'login' ? <LogIn size={20} /> : <UserPlus size={20} />}
-                  <span>{modo === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'}</span>
+                  <LogIn size={24} />
+                  <span>Iniciar Sesión</span>
                 </>
               )}
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <button
-              onClick={() => {
-                setModo(modo === 'login' ? 'registro' : 'login');
-                setError('');
-                setMensaje('');
-              }}
-              className="text-blue-200 hover:text-white transition-colors text-sm"
-            >
-              {modo === 'login'
-                ? '¿No tienes cuenta? Regístrate aquí'
-                : '¿Ya tienes cuenta? Inicia sesión'}
-            </button>
-          </div>
-
           <div className="mt-8 pt-6 border-t border-white/20 text-center">
-            <p className="text-blue-200 text-sm">
+            <p className="text-teal-100 text-sm font-medium">
               Sistema seguro - Municipalidad de Guatemala
             </p>
-            <p className="text-blue-300 text-xs mt-2">
-              Departamento Jurídico • Proyecto piloto 2025
+            <p className="text-teal-200 text-xs mt-2">
+              Departamento Jurídico • Proyecto Red Ciudadana 2025
             </p>
           </div>
         </div>
 
-        <div className="mt-6 bg-blue-900/30 backdrop-blur-sm rounded-2xl border border-blue-400/20 p-4">
-          <p className="text-blue-200 text-sm font-semibold mb-2">
-            Credenciales de Prueba:
-          </p>
-          <div className="space-y-1 text-xs text-blue-300">
-            <p>• jherrera@redciudadana.org.gt</p>
-            <p>• municipalidad@muniguate.gob.gt</p>
-            <p>• admin@muniguate.gob.gt</p>
-            <p className="mt-2 text-blue-200">Contraseña: <span className="font-mono bg-blue-950/50 px-2 py-1 rounded">redciudadana</span></p>
+        <div className="mt-8 bg-teal-900/40 backdrop-blur-md rounded-2xl border-2 border-teal-400/30 p-6 shadow-xl">
+          <div className="flex items-start space-x-3 mb-4">
+            <Sparkles className="text-teal-300 flex-shrink-0 mt-1" size={24} />
+            <div>
+              <p className="text-white text-base font-bold mb-2">
+                Versión Demo - Acceso Restringido
+              </p>
+              <p className="text-teal-100 text-sm leading-relaxed">
+                Esta es una versión de demostración del sistema. Para acceder, utiliza las siguientes credenciales:
+              </p>
+            </div>
           </div>
+
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 mb-4">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-teal-200 text-sm font-semibold">Usuario:</span>
+                <span className="text-white font-mono bg-neutral-900/50 px-3 py-1 rounded-lg text-sm font-bold">redciudadana</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-teal-200 text-sm font-semibold">Contraseña:</span>
+                <span className="text-white font-mono bg-neutral-900/50 px-3 py-1 rounded-lg text-sm font-bold">redciudadana</span>
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={llenarCredencialesDemo}
+            className="w-full bg-white/15 hover:bg-white/25 border border-white/30 text-white px-4 py-3 rounded-xl transition-all duration-200 font-semibold text-sm flex items-center justify-center space-x-2"
+          >
+            <Sparkles size={18} />
+            <span>Autocompletar Credenciales Demo</span>
+          </button>
         </div>
       </div>
     </div>

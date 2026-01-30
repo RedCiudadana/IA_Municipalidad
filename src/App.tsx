@@ -16,6 +16,7 @@ import AsistenteMinutas from './pages/AsistenteMinutas';
 import ResumenExpedientes from './pages/ResumenExpedientes';
 import AnalisisInversion from './pages/AnalisisInversion';
 import BibliotecaJuridica from './pages/BibliotecaJuridica';
+import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 
 function AppRoutes() {
@@ -26,6 +27,8 @@ function AppRoutes() {
 
   return (
     <Routes>
+      <Route path="/login" element={<Login />} />
+
       <Route element={
         <ProtectedRoute>
           <MainLayout />
