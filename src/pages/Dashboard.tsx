@@ -41,7 +41,8 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
       categoria: 'Asesoría Jurídica',
       tiempo: '2-3 min',
       popular: true,
-      ruta: '/agentes/oficios'
+      ruta: '/agentes/oficios',
+      proximamente: false
     },
     {
       id: 'dictamenes-juridicos',
@@ -54,7 +55,8 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
       categoria: 'Asesoría Jurídica',
       tiempo: '5-7 min',
       popular: true,
-      ruta: '/agentes/memos'
+      ruta: '/agentes/memos',
+      proximamente: false
     },
     {
       id: 'revision-contratos',
@@ -66,7 +68,8 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
       iconColor: 'text-orange-600',
       categoria: 'Contrataciones',
       tiempo: '4-6 min',
-      ruta: '/agentes/cartas'
+      ruta: '/agentes/cartas',
+      proximamente: false
     },
     {
       id: 'elaboracion-pliegos',
@@ -78,7 +81,8 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
       iconColor: 'text-red-600',
       categoria: 'Contrataciones',
       tiempo: '6-8 min',
-      ruta: '/agentes/minutas'
+      ruta: '/agentes/minutas',
+      proximamente: true
     },
     {
       id: 'calculo-plazos',
@@ -90,7 +94,8 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
       iconColor: 'text-teal-600',
       categoria: 'Procedimientos Administrativos',
       tiempo: '1-2 min',
-      ruta: '/agentes/resumenes'
+      ruta: '/agentes/resumenes',
+      proximamente: true
     },
     {
       id: 'redaccion-notificaciones',
@@ -102,7 +107,8 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
       iconColor: 'text-indigo-600',
       categoria: 'Procedimientos Administrativos',
       tiempo: '3-4 min',
-      ruta: '/agentes/analisis'
+      ruta: '/agentes/analisis',
+      proximamente: true
     }
   ];
 
@@ -289,13 +295,17 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
           {agentes.map((agente) => {
             const IconoComponente = agente.icono;
-            
+
             return (
               <div
                 key={agente.id}
-                className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border-2 border-gray-100 hover:border-gray-200 transform hover:-translate-y-2 overflow-hidden cursor-pointer relative"
+                className={`group bg-white rounded-3xl shadow-lg transition-all duration-500 border-2 overflow-hidden relative ${
+                  agente.proximamente
+                    ? 'border-gray-200 opacity-75'
+                    : 'hover:shadow-2xl border-gray-100 hover:border-gray-200 transform hover:-translate-y-2 cursor-pointer'
+                }`}
               >
-                {agente.popular && (
+                {agente.popular && !agente.proximamente && (
                   <div className="absolute top-4 right-4 z-10">
                     <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center space-x-1">
                       <Sparkles size={12} />
@@ -303,19 +313,29 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
                     </div>
                   </div>
                 )}
+                {agente.proximamente && (
+                  <div className="absolute top-4 right-4 z-10">
+                    <div className="bg-gradient-to-r from-gray-400 to-gray-500 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center space-x-1">
+                      <Clock size={12} />
+                      <span>Próximamente</span>
+                    </div>
+                  </div>
+                )}
                 {/* Header with gradient */}
-                <div className={`h-2 bg-gradient-to-r ${agente.color}`}></div>
+                <div className={`h-2 bg-gradient-to-r ${agente.proximamente ? 'from-gray-400 to-gray-500' : agente.color}`}></div>
 
                 <div className="p-8">
                   {/* Icon and Category */}
                   <div className="flex items-start justify-between mb-6">
                     <div className="relative">
-                      <div className={`w-20 h-20 ${agente.bgColor} rounded-3xl flex items-center justify-center shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:scale-110`}>
+                      <div className={`w-20 h-20 ${agente.bgColor} rounded-3xl flex items-center justify-center shadow-md ${!agente.proximamente && 'group-hover:shadow-xl transition-all duration-300 group-hover:scale-110'}`}>
                         <IconoComponente size={36} className={agente.iconColor} strokeWidth={2} />
                       </div>
-                      <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
-                        <Sparkles size={16} className="text-white" />
-                      </div>
+                      {!agente.proximamente && (
+                        <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                          <Sparkles size={16} className="text-white" />
+                        </div>
+                      )}
                     </div>
                     <div className="text-right">
                       <span className="inline-block bg-gray-100 text-gray-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-2">
@@ -327,25 +347,35 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Title and Description */}
                   <h3 className="text-2xl font-bold text-gray-900 mb-4 leading-tight">
                     {agente.titulo}
                   </h3>
-                  
+
                   <p className="text-gray-600 mb-8 leading-relaxed text-base">
                     {agente.descripcion}
                   </p>
-                  
+
                   {/* Action Button */}
-                  <button
-                    onClick={() => navigate(agente.ruta)}
-                    className={`w-full bg-gradient-to-r ${agente.color} hover:shadow-2xl text-white px-6 py-4 rounded-2xl transition-all duration-300 font-bold text-lg shadow-xl transform group-hover:scale-105 flex items-center justify-center space-x-3 relative overflow-hidden group/button`}
-                  >
-                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/button:translate-y-0 transition-transform duration-300"></div>
-                    <span className="relative">Comenzar Ahora</span>
-                    <ArrowRight size={22} className="relative group-hover:translate-x-2 transition-transform duration-300" strokeWidth={3} />
-                  </button>
+                  {agente.proximamente ? (
+                    <button
+                      disabled
+                      className="w-full bg-gray-400 text-white px-6 py-4 rounded-2xl font-bold text-lg shadow-lg cursor-not-allowed flex items-center justify-center space-x-3"
+                    >
+                      <Clock size={22} strokeWidth={3} />
+                      <span>Próximamente</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => navigate(agente.ruta)}
+                      className={`w-full bg-gradient-to-r ${agente.color} hover:shadow-2xl text-white px-6 py-4 rounded-2xl transition-all duration-300 font-bold text-lg shadow-xl transform group-hover:scale-105 flex items-center justify-center space-x-3 relative overflow-hidden group/button`}
+                    >
+                      <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/button:translate-y-0 transition-transform duration-300"></div>
+                      <span className="relative">Comenzar Ahora</span>
+                      <ArrowRight size={22} className="relative group-hover:translate-x-2 transition-transform duration-300" strokeWidth={3} />
+                    </button>
+                  )}
                 </div>
               </div>
             );
