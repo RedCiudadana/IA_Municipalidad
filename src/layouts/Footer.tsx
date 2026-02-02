@@ -5,7 +5,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white mt-auto">
       <div className="container mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Columna 1: Red Ciudadana */}
           <div className="space-y-6">
             <div className="flex items-center space-x-3">
@@ -71,62 +71,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Columna 2: Enlaces Rápidos */}
-          <div className="space-y-6">
-            <h3 className="text-xl font-bold text-white mb-4">Enlaces Rápidos</h3>
-
-            <nav className="space-y-3">
-              <a
-                href="https://redciudadana.org"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-gray-300 hover:text-white transition-colors text-sm"
-              >
-                Inicio
-              </a>
-              <a
-                href="https://redciudadana.org/metodologia"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-gray-300 hover:text-white transition-colors text-sm"
-              >
-                Metodología
-              </a>
-              <a
-                href="https://redciudadana.org/desafios"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-gray-300 hover:text-white transition-colors text-sm"
-              >
-                Desafíos
-              </a>
-              <a
-                href="https://redciudadana.org/curso-ia"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-gray-300 hover:text-white transition-colors text-sm"
-              >
-                Curso de IA
-              </a>
-              <a
-                href="https://docs.aigp-segeplan.gt"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-gray-300 hover:text-white transition-colors text-sm"
-              >
-                Documentación
-              </a>
-            </nav>
-
-            <div className="pt-4 border-t border-white/10">
-              <p className="text-xs text-gray-400">
-                Un proyecto de <span className="font-semibold text-white">Municipalidad de Guatemala</span> y{' '}
-                <span className="font-semibold text-white">Red Ciudadana</span>
-              </p>
-            </div>
-          </div>
-
-          {/* Columna 3: Contacto */}
+          {/* Columna 2: Contacto */}
           <div className="space-y-6">
             <h3 className="text-xl font-bold text-white mb-4">Contacto</h3>
 
@@ -136,7 +81,7 @@ const Footer: React.FC = () => {
                 <div>
                   <p className="text-sm font-semibold text-white mb-1">Dirección</p>
                   <p className="text-sm text-gray-300">
-                    21 calle 6-77, Zona 1, Ciudad de Guatemala
+                    Ciudad de Guatemala
                   </p>
                 </div>
               </div>
@@ -146,10 +91,10 @@ const Footer: React.FC = () => {
                 <div>
                   <p className="text-sm font-semibold text-white mb-1">Correo Electrónico</p>
                   <a
-                    href="mailto:juridico@muniguate.gob.gt"
+                    href="mailto:info@redciudadana.org.gt"
                     className="text-sm text-gray-300 hover:text-white transition-colors"
                   >
-                    juridico@muniguate.gob.gt
+                    info@redciudadana.org.gt
                   </a>
                 </div>
               </div>
