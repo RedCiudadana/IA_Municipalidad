@@ -228,90 +228,6 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
         </div>
       </section>
 
-      <section className="relative overflow-hidden">
-        <div className="gradient-primary rounded-3xl shadow-2xl overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0" style={{backgroundImage: "radial-gradient(circle, white 2px, transparent 2px)", backgroundSize: "40px 40px"}}></div>
-          </div>
-          <div className="relative px-8 py-14 lg:p-16">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
-              <div className="flex-1">
-                <div className="flex items-center space-x-5 mb-8">
-                  <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-xl">
-                    <FolderSearch size={40} className="text-white" />
-                  </div>
-                  <h2 className="text-4xl lg:text-5xl font-bold text-white">
-                    Biblioteca Jurídica Municipal
-                  </h2>
-                </div>
-                <p className="text-white/95 text-xl lg:text-2xl leading-relaxed mb-8 max-w-3xl">
-                  Accede al repositorio de precedentes administrativos municipales. Consulta acuerdos,
-                  opiniones técnicas, dictámenes y lineamientos para fortalecer tus argumentos jurídicos
-                  basándote en resoluciones previas.
-                </p>
-                <div className="flex flex-wrap gap-4 mb-8">
-                  <div className="flex items-center space-x-2 bg-white/15 backdrop-blur-md rounded-xl px-5 py-3 hover:bg-white/20 transition-all">
-                    <FileText size={22} className="text-white" />
-                    <span className="text-white font-semibold">Acuerdos</span>
-                  </div>
-                  <div className="flex items-center space-x-2 bg-white/15 backdrop-blur-md rounded-xl px-5 py-3 hover:bg-white/20 transition-all">
-                    <ScrollText size={22} className="text-white" />
-                    <span className="text-white font-semibold">Opiniones</span>
-                  </div>
-                  <div className="flex items-center space-x-2 bg-white/15 backdrop-blur-md rounded-xl px-5 py-3 hover:bg-white/20 transition-all">
-                    <FileCheck size={22} className="text-white" />
-                    <span className="text-white font-semibold">Dictámenes</span>
-                  </div>
-                  <div className="flex items-center space-x-2 bg-white/15 backdrop-blur-md rounded-xl px-5 py-3 hover:bg-white/20 transition-all">
-                    <Briefcase size={22} className="text-white" />
-                    <span className="text-white font-semibold">Lineamientos</span>
-                  </div>
-                </div>
-              </div>
-              <div className="flex-shrink-0">
-                <button
-                  onClick={() => navigate('/biblioteca-juridica')}
-                  className="btn-primary bg-white hover:bg-neutral-50 text-teal-700 px-10 py-5 text-xl flex items-center space-x-4 shadow-2xl"
-                >
-                  <span>Explorar Biblioteca</span>
-                  <ArrowRight size={26} strokeWidth={2.5} />
-                </button>
-                <p className="text-white/80 text-base mt-4 text-center font-medium">Búsqueda inteligente de precedentes</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-              <div className="bg-white/15 backdrop-blur-md rounded-2xl p-8 hover:bg-white/20 transition-all duration-300">
-                <div className="flex items-center space-x-4 mb-4">
-                  <div className="w-12 h-12 bg-white/25 rounded-xl flex items-center justify-center">
-                    <FolderSearch size={24} className="text-white" />
-                  </div>
-                  <h3 className="text-white font-bold text-xl">Búsqueda Avanzada</h3>
-                </div>
-                <p className="text-white/85 text-base leading-relaxed">Filtra por categoría, tipo de documento, fecha y palabras clave</p>
-              </div>
-              <div className="bg-white/15 backdrop-blur-md rounded-2xl p-8 hover:bg-white/20 transition-all duration-300">
-                <div className="flex items-center space-x-4 mb-4">
-                  <div className="w-12 h-12 bg-white/25 rounded-xl flex items-center justify-center">
-                    <TrendingUp size={24} className="text-white" />
-                  </div>
-                  <h3 className="text-white font-bold text-xl">Más Relevantes</h3>
-                </div>
-                <p className="text-white/85 text-base leading-relaxed">Accede a los documentos más consultados y de mayor relevancia</p>
-              </div>
-              <div className="bg-white/15 backdrop-blur-md rounded-2xl p-8 hover:bg-white/20 transition-all duration-300">
-                <div className="flex items-center space-x-4 mb-4">
-                  <div className="w-12 h-12 bg-white/25 rounded-xl flex items-center justify-center">
-                    <Shield size={24} className="text-white" />
-                  </div>
-                  <h3 className="text-white font-bold text-xl">Historial</h3>
-                </div>
-                <p className="text-white/85 text-base leading-relaxed">Consulta cómo se resolvieron casos similares anteriormente</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section>
         <div className="text-center mb-14">
           <h2 className="text-4xl lg:text-5xl font-bold text-neutral-900 mb-5">
@@ -401,6 +317,90 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
               </div>
             );
           })}
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden">
+        <div className="gradient-primary rounded-3xl shadow-2xl overflow-hidden">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute inset-0" style={{backgroundImage: "radial-gradient(circle, white 2px, transparent 2px)", backgroundSize: "40px 40px"}}></div>
+          </div>
+          <div className="relative px-8 py-14 lg:p-16">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
+              <div className="flex-1">
+                <div className="flex items-center space-x-5 mb-8">
+                  <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-xl">
+                    <FolderSearch size={40} className="text-white" />
+                  </div>
+                  <h2 className="text-4xl lg:text-5xl font-bold text-white">
+                    Biblioteca Jurídica Municipal
+                  </h2>
+                </div>
+                <p className="text-white/95 text-xl lg:text-2xl leading-relaxed mb-8 max-w-3xl">
+                  Accede al repositorio de precedentes administrativos municipales. Consulta acuerdos,
+                  opiniones técnicas, dictámenes y lineamientos para fortalecer tus argumentos jurídicos
+                  basándote en resoluciones previas.
+                </p>
+                <div className="flex flex-wrap gap-4 mb-8">
+                  <div className="flex items-center space-x-2 bg-white/15 backdrop-blur-md rounded-xl px-5 py-3 hover:bg-white/20 transition-all">
+                    <FileText size={22} className="text-white" />
+                    <span className="text-white font-semibold">Acuerdos</span>
+                  </div>
+                  <div className="flex items-center space-x-2 bg-white/15 backdrop-blur-md rounded-xl px-5 py-3 hover:bg-white/20 transition-all">
+                    <ScrollText size={22} className="text-white" />
+                    <span className="text-white font-semibold">Opiniones</span>
+                  </div>
+                  <div className="flex items-center space-x-2 bg-white/15 backdrop-blur-md rounded-xl px-5 py-3 hover:bg-white/20 transition-all">
+                    <FileCheck size={22} className="text-white" />
+                    <span className="text-white font-semibold">Dictámenes</span>
+                  </div>
+                  <div className="flex items-center space-x-2 bg-white/15 backdrop-blur-md rounded-xl px-5 py-3 hover:bg-white/20 transition-all">
+                    <Briefcase size={22} className="text-white" />
+                    <span className="text-white font-semibold">Lineamientos</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex-shrink-0">
+                <button
+                  onClick={() => navigate('/biblioteca-juridica')}
+                  className="btn-primary bg-white hover:bg-neutral-50 text-teal-700 px-10 py-5 text-xl flex items-center space-x-4 shadow-2xl"
+                >
+                  <span>Explorar Biblioteca</span>
+                  <ArrowRight size={26} strokeWidth={2.5} />
+                </button>
+                <p className="text-white/80 text-base mt-4 text-center font-medium">Búsqueda inteligente de precedentes</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+              <div className="bg-white/15 backdrop-blur-md rounded-2xl p-8 hover:bg-white/20 transition-all duration-300">
+                <div className="flex items-center space-x-4 mb-4">
+                  <div className="w-12 h-12 bg-white/25 rounded-xl flex items-center justify-center">
+                    <FolderSearch size={24} className="text-white" />
+                  </div>
+                  <h3 className="text-white font-bold text-xl">Búsqueda Avanzada</h3>
+                </div>
+                <p className="text-white/85 text-base leading-relaxed">Filtra por categoría, tipo de documento, fecha y palabras clave</p>
+              </div>
+              <div className="bg-white/15 backdrop-blur-md rounded-2xl p-8 hover:bg-white/20 transition-all duration-300">
+                <div className="flex items-center space-x-4 mb-4">
+                  <div className="w-12 h-12 bg-white/25 rounded-xl flex items-center justify-center">
+                    <TrendingUp size={24} className="text-white" />
+                  </div>
+                  <h3 className="text-white font-bold text-xl">Más Relevantes</h3>
+                </div>
+                <p className="text-white/85 text-base leading-relaxed">Accede a los documentos más consultados y de mayor relevancia</p>
+              </div>
+              <div className="bg-white/15 backdrop-blur-md rounded-2xl p-8 hover:bg-white/20 transition-all duration-300">
+                <div className="flex items-center space-x-4 mb-4">
+                  <div className="w-12 h-12 bg-white/25 rounded-xl flex items-center justify-center">
+                    <Shield size={24} className="text-white" />
+                  </div>
+                  <h3 className="text-white font-bold text-xl">Historial</h3>
+                </div>
+                <p className="text-white/85 text-base leading-relaxed">Consulta cómo se resolvieron casos similares anteriormente</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
