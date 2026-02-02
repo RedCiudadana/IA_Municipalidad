@@ -8,7 +8,7 @@ const Login: React.FC = () => {
   const { signIn, user, loading } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   });
   const [mostrarPassword, setMostrarPassword] = useState(false);
@@ -34,7 +34,7 @@ const Login: React.FC = () => {
     setCargando(true);
     setError('');
 
-    const { error } = await signIn(formData.username, formData.password);
+    const { error } = await signIn(formData.email, formData.password);
 
     if (error) {
       setError(error.message || 'Error al iniciar sesión');
@@ -46,8 +46,8 @@ const Login: React.FC = () => {
 
   const llenarCredencialesDemo = () => {
     setFormData({
-      username: 'redciudadana',
-      password: 'redciudadana'
+      email: 'demo@redciudadana.org.gt',
+      password: 'redciudadana2024'
     });
     setError('');
   };
@@ -113,15 +113,15 @@ const Login: React.FC = () => {
           <form onSubmit={manejarLogin} className="space-y-6">
             <div>
               <label className="block text-white font-semibold mb-3">
-                Usuario
+                Correo Electrónico
               </label>
               <div className="relative">
                 <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral-300" size={22} />
                 <input
-                  type="text"
-                  value={formData.username}
-                  onChange={(e) => manejarCambio('username', e.target.value)}
-                  placeholder="Ingresa tu usuario"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => manejarCambio('email', e.target.value)}
+                  placeholder="correo@ejemplo.com"
                   required
                   className="w-full pl-12 pr-4 py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-neutral-300 focus:ring-2 focus:ring-teal-400 focus:border-teal-400 backdrop-blur-sm transition-all text-base font-medium"
                 />
@@ -206,12 +206,12 @@ const Login: React.FC = () => {
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 mb-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-teal-200 text-sm font-semibold">Usuario:</span>
-                <span className="text-white font-mono bg-neutral-900/50 px-3 py-1 rounded-lg text-sm font-bold">redciudadana</span>
+                <span className="text-teal-200 text-sm font-semibold">Email:</span>
+                <span className="text-white font-mono bg-neutral-900/50 px-3 py-1 rounded-lg text-sm font-bold">demo@redciudadana.org.gt</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-teal-200 text-sm font-semibold">Contraseña:</span>
-                <span className="text-white font-mono bg-neutral-900/50 px-3 py-1 rounded-lg text-sm font-bold">redciudadana</span>
+                <span className="text-white font-mono bg-neutral-900/50 px-3 py-1 rounded-lg text-sm font-bold">redciudadana2024</span>
               </div>
             </div>
           </div>

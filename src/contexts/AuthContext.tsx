@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { supabase } from '../lib/supabase';
 
 interface UsuarioPerfil {
   id: string;
@@ -21,8 +22,9 @@ interface AuthContextType {
   user: User | null;
   perfil: UsuarioPerfil | null;
   loading: boolean;
-  signIn: (username: string, password: string) => Promise<{ error: any }>;
+  signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
+  updatePerfil: (data: Partial<UsuarioPerfil>) => Promise<{ error: any }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,75 +37,130 @@ export const useAuth = () => {
   return context;
 };
 
-const DEMO_USERNAME = 'redciudadana';
-const DEMO_PASSWORD = 'redciudadana';
-const DEMO_USER_KEY = 'demo_user_session';
-
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [perfil, setPerfil] = useState<UsuarioPerfil | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const sessionData = localStorage.getItem(DEMO_USER_KEY);
-    if (sessionData) {
-      try {
-        const { user: savedUser, perfil: savedPerfil } = JSON.parse(sessionData);
-        setUser(savedUser);
-        setPerfil(savedPerfil);
-      } catch (error) {
-        console.error('Error al cargar sesión:', error);
-        localStorage.removeItem(DEMO_USER_KEY);
+  const cargarPerfil = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('usuarios')
+        .select('*')
+        .eq('id', userId)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error al cargar perfil:', error);
+        return;
       }
+
+      if (data) {
+        setPerfil(data);
+      }
+    } catch (error) {
+      console.error('Error al cargar perfil:', error);
     }
-    setLoading(false);
+  };
+
+  useEffect(() => {
+    const initAuth = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (session?.user) {
+          setUser({
+            id: session.user.id,
+            email: session.user.email || ''
+          });
+          await cargarPerfil(session.user.id);
+        }
+      } catch (error) {
+        console.error('Error al inicializar auth:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (_event, session) => {
+        if (session?.user) {
+          setUser({
+            id: session.user.id,
+            email: session.user.email || ''
+          });
+          await cargarPerfil(session.user.id);
+        } else {
+          setUser(null);
+          setPerfil(null);
+        }
+        setLoading(false);
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
-  const signIn = async (username: string, password: string) => {
+  const signIn = async (email: string, password: string) => {
     try {
-      if (username === DEMO_USERNAME && password === DEMO_PASSWORD) {
-        const demoUser: User = {
-          id: 'demo-user-001',
-          email: 'demo@redciudadana.org.gt'
-        };
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
 
-        const demoPerfil: UsuarioPerfil = {
-          id: 'demo-user-001',
-          nombre: 'Usuario Demo Red Ciudadana',
-          cargo: 'Asesor Jurídico',
-          email: 'demo@redciudadana.org.gt',
-          departamento: 'Departamento Jurídico',
-          telefono: '+502 0000-0000',
-          ubicacion: 'Municipalidad de Guatemala',
-          biografia: 'Usuario de demostración para el sistema de IA Jurídico Municipal',
-          fecha_ingreso: new Date().toISOString()
-        };
-
-        setUser(demoUser);
-        setPerfil(demoPerfil);
-
-        localStorage.setItem(DEMO_USER_KEY, JSON.stringify({
-          user: demoUser,
-          perfil: demoPerfil
-        }));
-
-        return { error: null };
-      } else {
-        return {
-          error: {
-            message: 'Credenciales incorrectas. Usuario o contraseña inválidos.'
-          }
-        };
+      if (error) {
+        return { error };
       }
+
+      if (data.user) {
+        setUser({
+          id: data.user.id,
+          email: data.user.email || ''
+        });
+        await cargarPerfil(data.user.id);
+      }
+
+      return { error: null };
     } catch (error: any) {
       return { error };
     }
   };
 
   const signOut = async () => {
-    setUser(null);
-    setPerfil(null);
-    localStorage.removeItem(DEMO_USER_KEY);
+    try {
+      await supabase.auth.signOut();
+      setUser(null);
+      setPerfil(null);
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
+  };
+
+  const updatePerfil = async (data: Partial<UsuarioPerfil>) => {
+    try {
+      if (!user) {
+        return { error: { message: 'No hay usuario autenticado' } };
+      }
+
+      const { error } = await supabase
+        .from('usuarios')
+        .update(data)
+        .eq('id', user.id);
+
+      if (error) {
+        return { error };
+      }
+
+      await cargarPerfil(user.id);
+
+      return { error: null };
+    } catch (error: any) {
+      return { error };
+    }
   };
 
   const value = {
@@ -111,7 +168,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     perfil,
     loading,
     signIn,
-    signOut
+    signOut,
+    updatePerfil
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
