@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, FileText, File as FileEdit, Mail, ClipboardList, BookOpen, FolderOpen, FileQuestion, ChevronDown, Menu, X, GraduationCap } from 'lucide-react';
+import { Home, FileText, FileCheck, Search, Scale, Calculator, Bell, FileQuestion, ChevronDown, Menu, X, GraduationCap } from 'lucide-react';
 
 const TopNavigation: React.FC = () => {
   const [menuMovilAbierto, setMenuMovilAbierto] = useState(false);
@@ -14,12 +14,12 @@ const TopNavigation: React.FC = () => {
   ];
 
   const agentes = [
-    { id: 'redactor-oficios', titulo: 'Oficios', icono: FileText, ruta: '/agentes/oficios' },
-    { id: 'generador-memos', titulo: 'Memos', icono: FileEdit, ruta: '/agentes/memos' },
-    { id: 'redactor-cartas', titulo: 'Cartas', icono: Mail, ruta: '/agentes/cartas' },
-    { id: 'asistente-minutas', titulo: 'Minutas', icono: ClipboardList, ruta: '/agentes/minutas' },
-    { id: 'resumen-expedientes', titulo: 'Resúmenes', icono: BookOpen, ruta: '/agentes/resumenes' },
-    { id: 'analisis-inversion', titulo: 'Análisis', icono: FolderOpen, ruta: '/agentes/analisis' }
+    { id: 'busqueda-normativa', titulo: 'Búsqueda de Normativa', icono: Search, ruta: '/agentes/busqueda-normativa' },
+    { id: 'dictamenes-juridicos', titulo: 'Dictámenes Jurídicos', icono: Scale, ruta: '/agentes/dictamenes-juridicos' },
+    { id: 'revision-contratos', titulo: 'Revisión de Contratos', icono: FileCheck, ruta: '/agentes/revision-contratos' },
+    { id: 'elaboracion-pliegos', titulo: 'Elaboración de Pliegos', icono: FileText, ruta: '/agentes/elaboracion-pliegos' },
+    { id: 'calculo-plazos', titulo: 'Cálculo de Plazos Legales', icono: Calculator, ruta: '/agentes/calculo-plazos' },
+    { id: 'redaccion-notificaciones', titulo: 'Redacción de Notificaciones', icono: Bell, ruta: '/agentes/redaccion-notificaciones' }
   ];
 
   const manejarClick = () => {
