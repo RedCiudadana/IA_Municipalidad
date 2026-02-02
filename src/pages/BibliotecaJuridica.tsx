@@ -96,9 +96,24 @@ export default function BibliotecaJuridica() {
         supabase.from('normativas_legales').select('*').order('orden')
       ]);
 
-      if (categoriasRes.data) setCategorias(categoriasRes.data);
-      if (tiposRes.data) setTiposDocumento(tiposRes.data);
-      if (normativasRes.data) setNormativas(normativasRes.data);
+      if (categoriasRes.error) {
+        console.error('Error cargando categorías:', categoriasRes.error);
+      } else if (categoriasRes.data) {
+        setCategorias(categoriasRes.data);
+      }
+
+      if (tiposRes.error) {
+        console.error('Error cargando tipos:', tiposRes.error);
+      } else if (tiposRes.data) {
+        setTiposDocumento(tiposRes.data);
+      }
+
+      if (normativasRes.error) {
+        console.error('Error cargando normativas:', normativasRes.error);
+      } else if (normativasRes.data) {
+        console.log('Normativas cargadas:', normativasRes.data);
+        setNormativas(normativasRes.data);
+      }
     } catch (error) {
       console.error('Error cargando datos:', error);
     }
@@ -245,7 +260,7 @@ export default function BibliotecaJuridica() {
           </div>
         </div>
 
-        {normativas.length > 0 && (
+        {normativas.length > 0 ? (
           <div className="card p-8 mb-8 border-2 border-teal-100 bg-gradient-to-br from-teal-50/30 to-white">
             <div className="flex items-center space-x-4 mb-6">
               <div className="w-14 h-14 bg-gradient-to-br from-teal-600 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg">
@@ -293,6 +308,10 @@ export default function BibliotecaJuridica() {
                 </a>
               ))}
             </div>
+          </div>
+        ) : (
+          <div className="card p-4 mb-8 bg-yellow-50 border border-yellow-200">
+            <p className="text-yellow-800">No se encontraron normativas legales. Total normativas: {normativas.length}</p>
           </div>
         )}
 
