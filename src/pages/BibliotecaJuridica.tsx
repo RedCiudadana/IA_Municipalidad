@@ -1,7 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Search, Filter, BookOpen, Calendar, Tag, Eye, ExternalLink, FileText, ChevronDown, ChevronUp, X, Download, Sparkles, Lightbulb, TrendingUp } from 'lucide-react';
+import { Search, Filter, BookOpen, Calendar, Tag, Eye, ExternalLink, FileText, ChevronDown, ChevronUp, X, Download, Sparkles, Lightbulb, TrendingUp, Scale } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+
+interface NormativaLegal {
+  id: string;
+  nombre: string;
+  numero_decreto: string | null;
+  tipo_normativa: string;
+  descripcion: string | null;
+  documento_url: string;
+  vigente: boolean;
+  orden: number;
+}
 
 interface Categoria {
   id: string;
@@ -53,6 +64,7 @@ interface AnalisisBusqueda {
 
 export default function BibliotecaJuridica() {
   const { user } = useAuth();
+  const [normativas, setNormativas] = useState<NormativaLegal[]>([]);
   const [documentos, setDocumentos] = useState<DocumentoJuridico[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [tiposDocumento, setTiposDocumento] = useState<TipoDocumento[]>([]);
@@ -78,13 +90,15 @@ export default function BibliotecaJuridica() {
 
   const cargarDatosIniciales = async () => {
     try {
-      const [categoriasRes, tiposRes] = await Promise.all([
+      const [categoriasRes, tiposRes, normativasRes] = await Promise.all([
         supabase.from('categorias_juridicas').select('*').order('nombre'),
-        supabase.from('tipos_documento_juridico').select('*').order('nombre')
+        supabase.from('tipos_documento_juridico').select('*').order('nombre'),
+        supabase.from('normativas_legales').select('*').order('orden')
       ]);
 
       if (categoriasRes.data) setCategorias(categoriasRes.data);
       if (tiposRes.data) setTiposDocumento(tiposRes.data);
+      if (normativasRes.data) setNormativas(normativasRes.data);
     } catch (error) {
       console.error('Error cargando datos:', error);
     }
@@ -230,6 +244,57 @@ export default function BibliotecaJuridica() {
             </div>
           </div>
         </div>
+
+        {normativas.length > 0 && (
+          <div className="card p-8 mb-8 border-2 border-teal-100 bg-gradient-to-br from-teal-50/30 to-white">
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="w-14 h-14 bg-gradient-to-br from-teal-600 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <Scale size={28} className="text-white" />
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold text-neutral-900">Marco Legal de Referencia</h2>
+                <p className="text-neutral-600 text-base mt-1">Normativa legal guatemalteca aplicable al ámbito municipal</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {normativas.map((normativa) => (
+                <a
+                  key={normativa.id}
+                  href={normativa.documento_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group p-5 bg-white border-2 border-neutral-200 rounded-xl hover:border-teal-400 hover:shadow-lg transition-all"
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <FileText size={20} className="text-teal-600" />
+                        <span className="text-xs font-bold text-teal-700 bg-teal-100 px-2 py-1 rounded-lg">
+                          {normativa.tipo_normativa}
+                        </span>
+                        {normativa.numero_decreto && (
+                          <span className="text-xs font-semibold text-neutral-500">
+                            {normativa.numero_decreto}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="font-bold text-neutral-900 text-lg mb-1 group-hover:text-teal-700 transition-colors">
+                        {normativa.nombre}
+                      </h3>
+                      {normativa.descripcion && (
+                        <p className="text-sm text-neutral-600 line-clamp-2">
+                          {normativa.descripcion}
+                        </p>
+                      )}
+                    </div>
+                    <ExternalLink size={20} className="text-neutral-400 group-hover:text-teal-600 transition-colors ml-3 flex-shrink-0" />
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="card p-8 mb-8">
           <div className="flex flex-col md:flex-row items-stretch md:items-center space-y-4 md:space-y-0 md:space-x-4 mb-6">
