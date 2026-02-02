@@ -3,8 +3,7 @@ import FormularioDocumento from '../components/ui/FormularioDocumento';
 import EditorResultado from '../components/ui/EditorResultado';
 import PanelRecursos from '../components/ui/PanelRecursos';
 import FileUpload from '../components/ui/FileUpload';
-import { Agent, run, setDefaultOpenAIClient } from "@openai/agents";
-import OpenAI from "openai";
+import { supabase } from '../lib/supabase';
 
 interface AnalisisInversionProps {
   usuario: { nombre: string; cargo: string };
@@ -16,94 +15,85 @@ const AnalisisInversion: React.FC<AnalisisInversionProps> = ({ usuario }) => {
   const [archivosSubidos, setArchivosSubidos] = useState<any[]>([]);
 
   const camposFormulario = [
-    { nombre: 'codigo_proyecto', etiqueta: 'Código del Proyecto', tipo: 'text' as const, requerido: true },
     { nombre: 'nombre_proyecto', etiqueta: 'Nombre del Proyecto', tipo: 'text' as const, requerido: true },
-    { nombre: 'institucion_ejecutora', etiqueta: 'Institución Ejecutora', tipo: 'text' as const, requerido: true },
-    { nombre: 'monto_total', etiqueta: 'Monto Total (GTQ)', tipo: 'number' as const, requerido: true },
-    { nombre: 'fecha_inicio', etiqueta: 'Fecha de Inicio', tipo: 'date' as const, requerido: true },
-    { nombre: 'fecha_fin', etiqueta: 'Fecha de Finalización', tipo: 'date' as const, requerido: true },
-    { 
-      nombre: 'categoria_inversion', 
-      etiqueta: 'Categoría de Inversión', 
-      tipo: 'select' as const, 
-      opciones: ['Infraestructura', 'Educación', 'Salud', 'Desarrollo Social', 'Medio Ambiente'],
+    { nombre: 'monto_inversion', etiqueta: 'Monto de Inversión (GTQ)', tipo: 'number' as const, requerido: true },
+    { nombre: 'plazo_ejecucion', etiqueta: 'Plazo de Ejecución', tipo: 'text' as const, requerido: true },
+    { nombre: 'fuente_financiamiento', etiqueta: 'Fuente de Financiamiento', tipo: 'text' as const, requerido: true },
+    { nombre: 'ubicacion', etiqueta: 'Ubicación del Proyecto', tipo: 'text' as const, requerido: true },
+    {
+      nombre: 'tipo_analisis',
+      etiqueta: 'Tipo de Análisis',
+      tipo: 'select' as const,
+      opciones: ['Técnico-Financiero', 'Costo-Beneficio', 'Viabilidad', 'Factibilidad', 'Impacto Social'],
       requerido: true
     },
-    { 
-      nombre: 'tipo_analisis', 
-      etiqueta: 'Tipo de Análisis', 
-      tipo: 'select' as const, 
-      opciones: ['Viabilidad', 'Factibilidad', 'Seguimiento', 'Evaluación'],
-      requerido: true
-    },
-    { nombre: 'region', etiqueta: 'Región', tipo: 'text' as const, requerido: true }
+    { nombre: 'beneficiarios', etiqueta: 'Población Beneficiaria', tipo: 'text' as const },
+    { nombre: 'justificacion', etiqueta: 'Justificación del Proyecto', tipo: 'textarea' as const }
   ];
 
   const manejarGeneracion = async (datos: any) => {
     setCargando(true);
     try {
-      const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-      if (!apiKey) {
-        setDocumento('Error: No está definida la variable VITE_OPENAI_API_KEY');
-        setCargando(false);
-        return;
-      }
-      const client = new OpenAI({
-        apiKey,
-        dangerouslyAllowBrowser: true
-      });
-      setDefaultOpenAIClient(client);
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/analizar-inversion`;
 
-      let archivos = '';
-      let referenciaArchivos = '';
-      if (archivosSubidos.length > 0) {
-        archivos = `\nDocumentos del expediente: ${archivosSubidos.map(a => a.nombre).join(', ')}`;
-        const textos = archivosSubidos
-          .filter(a => a.contenido)
-          .map(a => `Contenido de ${a.nombre}:\n${a.contenido.substring(0, 1000)}`)
-          .join('\n\n');
-        if (textos) {
-          referenciaArchivos = `\n\nReferencia de documentos subidos:\n${textos}`;
-        }
-      }
-      const prompt = `Eres un agente especializado en redacción de notificaciones jurídicas municipales conforme a requisitos legales.
-      Redacta notificación con: \n\nExpediente: ${datos.codigo_proyecto}\nProcedimiento: ${datos.nombre_proyecto}
-      \nDestinatario: ${datos.institucion_ejecutora}\nMonto/Valor: Q. ${Number(datos.monto_total).toLocaleString('es-GT')}
-      \nFecha inicio: ${datos.fecha_inicio}\nFecha límite: ${datos.fecha_fin}\nTipo: ${datos.categoria_inversion}
-      \nMedio notificación: ${datos.tipo_analisis}\nLugar: ${datos.region}${archivos}${referenciaArchivos}
-      \n\nIncluye requisitos legales de notificación, términos, plazos, efectos jurídicos.
-      Firma: ${usuario.nombre}, ${usuario.cargo}, Departamento Jurídico - Municipalidad de Guatemala.`;
+      const requestBody = {
+        nombre_proyecto: datos.nombre_proyecto,
+        monto_inversion: datos.monto_inversion,
+        plazo_ejecucion: datos.plazo_ejecucion,
+        fuente_financiamiento: datos.fuente_financiamiento,
+        ubicacion: datos.ubicacion,
+        tipo_analisis: datos.tipo_analisis,
+        beneficiarios: datos.beneficiarios,
+        justificacion: datos.justificacion,
+        archivos: archivosSubidos.length > 0 ? archivosSubidos : undefined,
+        usuario_nombre: usuario.nombre,
+        usuario_cargo: usuario.cargo
+      };
 
-      const agent = new Agent({
-        name: "AnalisisInversionIA",
-        model: "gpt-4o-mini",
-        instructions: prompt
+      const { data: { session } } = await supabase.auth.getSession();
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session?.access_token || import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody)
       });
-      const result = await run(agent, "");
-      setDocumento(result.finalOutput ?? 'No se pudo generar el análisis.');
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error al generar el análisis');
+      }
+
+      const result = await response.json();
+      setDocumento(result.analisis || 'No se pudo generar el análisis.');
     } catch (err) {
-      setDocumento('Error al generar el análisis.');
+      console.error('Error:', err);
+      setDocumento(`Error al generar el análisis: ${err instanceof Error ? err.message : 'Error desconocido'}`);
     }
     setCargando(false);
   };
 
   const recursosEspecificos = [
     {
-      categoria: 'Tipos de Notificación',
+      categoria: 'Componentes del Análisis',
       items: [
-        'Notificación personal',
-        'Notificación por correo',
-        'Notificación por edicto',
-        'Notificación electrónica'
+        'Análisis técnico',
+        'Análisis financiero (VAN, TIR)',
+        'Análisis económico-social',
+        'Análisis de riesgos',
+        'Marco legal y normativo',
+        'Conclusiones y recomendaciones'
       ]
     },
     {
-      categoria: 'Requisitos Legales',
+      categoria: 'Normativa Aplicable',
       items: [
-        'Código Procesal Civil y Mercantil',
-        'Ley del Organismo Judicial',
-        'Ley de lo Contencioso Administrativo',
-        'Efectos de la notificación'
+        'Ley de Contrataciones del Estado',
+        'Ley Orgánica del Presupuesto',
+        'Código Municipal',
+        'Normativa ambiental'
       ]
     }
   ];
@@ -112,10 +102,10 @@ const AnalisisInversion: React.FC<AnalisisInversionProps> = ({ usuario }) => {
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Redacción de Notificaciones Jurídicas
+          Análisis de Proyectos de Inversión
         </h2>
         <p className="text-gray-600">
-          Redacta notificaciones jurídicas conforme a requisitos legales de notificación
+          Genera análisis técnicos, financieros y legales completos de proyectos de inversión municipal
         </p>
       </div>
 

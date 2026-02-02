@@ -186,19 +186,17 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
       const { error } = await updatePerfil({
         nombre: perfilData.nombre,
         cargo: perfilData.cargo,
-        telefono: perfilData.telefono,
-        departamento: perfilData.departamento,
-        ubicacion: perfilData.ubicacion,
-        biografia: perfilData.biografia
+        telefono: perfilData.telefono || null,
+        departamento: perfilData.departamento || null,
+        ubicacion: perfilData.ubicacion || null,
+        biografia: perfilData.biografia || null
       });
 
       if (error) throw error;
 
-      alert('Cambios guardados exitosamente');
       setEditandoPerfil(false);
     } catch (error) {
       console.error('Error al guardar cambios:', error);
-      alert('No se pudieron guardar los cambios');
     }
   };
 
@@ -268,18 +266,12 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-              {editandoPerfil ? (
-                <input
-                  type="email"
-                  value={perfilData.email}
-                  onChange={(e) => manejarCambioPerfil('email', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              ) : (
-                <p className="text-gray-800 font-medium flex items-center">
-                  <Mail size={16} className="mr-2 text-gray-500" />
-                  {perfilData.email}
-                </p>
+              <p className="text-gray-800 font-medium flex items-center">
+                <Mail size={16} className="mr-2 text-gray-500" />
+                {perfilData.email}
+              </p>
+              {editandoPerfil && (
+                <p className="text-xs text-gray-500 mt-1">El email no se puede modificar</p>
               )}
             </div>
 
@@ -302,18 +294,36 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Departamento</label>
-              <p className="text-gray-800 font-medium flex items-center">
-                <Briefcase size={16} className="mr-2 text-gray-500" />
-                {perfilData.departamento}
-              </p>
+              {editandoPerfil ? (
+                <input
+                  type="text"
+                  value={perfilData.departamento}
+                  onChange={(e) => manejarCambioPerfil('departamento', e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-800 font-medium flex items-center">
+                  <Briefcase size={16} className="mr-2 text-gray-500" />
+                  {perfilData.departamento}
+                </p>
+              )}
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Ubicación</label>
-              <p className="text-gray-800 font-medium flex items-center">
-                <MapPin size={16} className="mr-2 text-gray-500" />
-                {perfilData.ubicacion}
-              </p>
+              {editandoPerfil ? (
+                <input
+                  type="text"
+                  value={perfilData.ubicacion}
+                  onChange={(e) => manejarCambioPerfil('ubicacion', e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              ) : (
+                <p className="text-gray-800 font-medium flex items-center">
+                  <MapPin size={16} className="mr-2 text-gray-500" />
+                  {perfilData.ubicacion}
+                </p>
+              )}
             </div>
           </div>
         </div>

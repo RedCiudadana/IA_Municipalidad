@@ -3,8 +3,7 @@ import FormularioDocumento from '../components/ui/FormularioDocumento';
 import EditorResultado from '../components/ui/EditorResultado';
 import PanelRecursos from '../components/ui/PanelRecursos';
 import FileUpload from '../components/ui/FileUpload';
-import { Agent, run, setDefaultOpenAIClient } from "@openai/agents";
-import OpenAI from "openai";
+import { supabase } from '../lib/supabase';
 
 interface ResumenExpedientesProps {
   usuario: { nombre: string; cargo: string };
@@ -17,91 +16,88 @@ const ResumenExpedientes: React.FC<ResumenExpedientesProps> = ({ usuario }) => {
 
   const camposFormulario = [
     { nombre: 'numero_expediente', etiqueta: 'Número de Expediente', tipo: 'text' as const, requerido: true },
-    { nombre: 'titulo_expediente', etiqueta: 'Título del Expediente', tipo: 'text' as const, requerido: true },
-    { nombre: 'fecha_inicio', etiqueta: 'Fecha de Inicio', tipo: 'date' as const, requerido: true },
-    { nombre: 'responsable', etiqueta: 'Responsable', tipo: 'text' as const, requerido: true },
-    { nombre: 'departamento', etiqueta: 'Departamento', tipo: 'text' as const, requerido: true },
-    { 
-      nombre: 'estado_expediente', 
-      etiqueta: 'Estado del Expediente', 
-      tipo: 'select' as const, 
-      opciones: ['En Proceso', 'Completado', 'Suspendido', 'Archivado'],
+    {
+      nombre: 'tipo_caso',
+      etiqueta: 'Tipo de Caso',
+      tipo: 'select' as const,
+      opciones: ['Civil', 'Penal', 'Laboral', 'Administrativo', 'Contencioso Administrativo', 'Constitucional', 'Mercantil'],
       requerido: true
     },
-    { 
-      nombre: 'tipo_resumen', 
-      etiqueta: 'Tipo de Resumen', 
-      tipo: 'select' as const, 
-      opciones: ['Ejecutivo', 'Técnico', 'Administrativo', 'Legal'],
-      requerido: true
-    },
-    { nombre: 'paginas_totales', etiqueta: 'Número Total de Páginas', tipo: 'number' as const }
+    { nombre: 'demandante', etiqueta: 'Demandante/Solicitante', tipo: 'text' as const },
+    { nombre: 'demandado', etiqueta: 'Demandado/Requerido', tipo: 'text' as const },
+    { nombre: 'fecha_inicio', etiqueta: 'Fecha de Inicio', tipo: 'date' as const },
+    {
+      nombre: 'estado',
+      etiqueta: 'Estado del Expediente',
+      tipo: 'select' as const,
+      opciones: ['En trámite', 'Pendiente de resolución', 'Resuelto', 'Archivado', 'Suspendido'],
+      requerido: false
+    }
   ];
 
   const manejarGeneracion = async (datos: any) => {
     setCargando(true);
     try {
-      const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-      if (!apiKey) {
-        setDocumento('Error: No está definida la variable VITE_OPENAI_API_KEY');
-        setCargando(false);
-        return;
-      }
-      const client = new OpenAI({
-        apiKey,
-        dangerouslyAllowBrowser: true
-      });
-      setDefaultOpenAIClient(client);
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generar-resumen-expediente`;
 
-      let archivos = '';
-      let referenciaArchivos = '';
-      if (archivosSubidos.length > 0) {
-        archivos = `\nDocumentos analizados: ${archivosSubidos.map(a => a.nombre).join(', ')}`;
-        const textos = archivosSubidos
-          .filter(a => a.contenido)
-          .map(a => `Contenido de ${a.nombre}:\n${a.contenido.substring(0, 1000)}`)
-          .join('\n\n');
-        if (textos) {
-          referenciaArchivos = `\n\nReferencia de documentos subidos:\n${textos}`;
-        }
-      }
-      const prompt = `Eres un agente especializado en cálculo automático de plazos legales en procedimientos administrativos municipales.
-      Calcula plazos para: \n\nExpediente: ${datos.numero_expediente}\nProcedimiento: ${datos.titulo_expediente}
-      \nFecha inicio: ${datos.fecha_inicio}\nResponsable: ${datos.responsable}\nUnidad: ${datos.departamento}
-      \nEstado: ${datos.estado_expediente}\nTipo: ${datos.tipo_resumen}${archivos}${referenciaArchivos}
-      \n\nCalcula plazos según Ley de lo Contencioso Administrativo, términos legales, días hábiles, fechas límite.
-      Firma: ${usuario.nombre}, ${usuario.cargo}, Departamento Jurídico - Municipalidad de Guatemala.`;
+      const requestBody = {
+        numero_expediente: datos.numero_expediente,
+        tipo_caso: datos.tipo_caso,
+        demandante: datos.demandante,
+        demandado: datos.demandado,
+        fecha_inicio: datos.fecha_inicio,
+        estado: datos.estado,
+        archivos: archivosSubidos.length > 0 ? archivosSubidos : undefined,
+        usuario_nombre: usuario.nombre,
+        usuario_cargo: usuario.cargo
+      };
 
-      const agent = new Agent({
-        name: "ResumenExpedientesIA",
-        model: "gpt-4o-mini",
-        instructions: prompt
+      const { data: { session } } = await supabase.auth.getSession();
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session?.access_token || import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody)
       });
-      const result = await run(agent, "");
-      setDocumento(result.finalOutput ?? 'No se pudo generar el resumen.');
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error al generar el resumen');
+      }
+
+      const result = await response.json();
+      setDocumento(result.resumen || 'No se pudo generar el resumen.');
     } catch (err) {
-      setDocumento('Error al generar el resumen.');
+      console.error('Error:', err);
+      setDocumento(`Error al generar el resumen: ${err instanceof Error ? err.message : 'Error desconocido'}`);
     }
     setCargando(false);
   };
 
   const recursosEspecificos = [
     {
-      categoria: 'Tipos de Plazos',
+      categoria: 'Elementos del Resumen',
       items: [
-        'Plazos administrativos',
-        'Plazos procesales',
-        'Términos de notificación',
-        'Términos de recurso'
+        'Datos generales del expediente',
+        'Antecedentes y hechos relevantes',
+        'Marco jurídico aplicable',
+        'Análisis legal',
+        'Actuaciones procesales',
+        'Conclusiones y recomendaciones'
       ]
     },
     {
-      categoria: 'Normativa Aplicable',
+      categoria: 'Tipos de Casos',
       items: [
-        'Ley de lo Contencioso Administrativo',
-        'Código Procesal Civil y Mercantil',
-        'Ley del Organismo Judicial',
-        'Código Municipal'
+        'Civil',
+        'Penal',
+        'Laboral',
+        'Administrativo',
+        'Contencioso Administrativo',
+        'Constitucional'
       ]
     }
   ];
@@ -110,10 +106,10 @@ const ResumenExpedientes: React.FC<ResumenExpedientesProps> = ({ usuario }) => {
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Cálculo de Plazos Legales
+          Generador de Resúmenes Ejecutivos de Expedientes
         </h2>
         <p className="text-gray-600">
-          Calcula automáticamente plazos procesales y términos legales en procedimientos
+          Genera análisis jurídicos completos y resúmenes ejecutivos de expedientes legales
         </p>
       </div>
 
