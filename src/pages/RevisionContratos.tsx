@@ -1,19 +1,18 @@
 import React, { useState, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 import {
   FileCheck,
   Upload,
   FileText,
   AlertTriangle,
   CheckCircle2,
-  XCircle,
   Search,
   Download,
   Copy,
   Loader2,
   Shield,
   Scale,
-  AlertCircle,
   BookOpen,
   ChevronDown,
   ChevronUp
@@ -120,14 +119,14 @@ const RevisionContratos: React.FC<RevisionContratosProps> = ({ usuario }) => {
     setResultado('');
 
     try {
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      const { data: { session } } = await supabase.auth.getSession();
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/revision-contratos`;
 
-      const response = await fetch(`${supabaseUrl}/functions/v1/revision-contratos`, {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${supabaseAnonKey}`,
+          'Authorization': `Bearer ${session?.access_token || import.meta.env.VITE_SUPABASE_ANON_KEY}`,
         },
         body: JSON.stringify({
           ...formulario,
