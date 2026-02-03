@@ -228,7 +228,7 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
         </div>
       </section>
 
-      <section>
+      <section id="agentes">
         <div className="text-center mb-14">
           <h2 className="text-4xl lg:text-5xl font-bold text-neutral-900 mb-5">
             Agentes Jurídicos Especializados
