@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Home, FileText, FileQuestion, Menu, X, GraduationCap } from 'lucide-react';
+import { Home, FileText, Menu, X, GraduationCap } from 'lucide-react';
 
 const TopNavigation: React.FC = () => {
   const [menuMovilAbierto, setMenuMovilAbierto] = useState(false);
@@ -9,8 +9,7 @@ const TopNavigation: React.FC = () => {
 
   const secciones = [
     { id: 'inicio', titulo: 'Inicio', icono: Home, ruta: '/' },
-    { id: 'tutoriales', titulo: 'Tutoriales', icono: GraduationCap, ruta: '/tutoriales' },
-    { id: 'documentacion', titulo: 'Documentación', icono: FileQuestion, ruta: '/documentacion' }
+    { id: 'tutoriales', titulo: 'Tutoriales', icono: GraduationCap, ruta: '/tutoriales' }
   ];
 
   const manejarClick = () => {

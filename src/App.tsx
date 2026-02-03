@@ -8,7 +8,6 @@ import Tutoriales from './pages/Tutoriales';
 import CursoIA from './pages/CursoIA';
 import Historial from './pages/Historial';
 import Estadisticas from './pages/Estadisticas';
-import Documentacion from './pages/Documentacion';
 import RedactorOficios from './pages/RedactorOficios';
 import GeneradorMemos from './pages/GeneradorMemos';
 import RedactorCartas from './pages/RedactorCartas';
@@ -41,7 +40,6 @@ function AppRoutes() {
         <Route path="/curso-ia" element={<CursoIA />} />
         <Route path="/historial" element={<Historial usuario={usuario} />} />
         <Route path="/estadisticas" element={<Estadisticas usuario={usuario} />} />
-        <Route path="/documentacion" element={<Documentacion usuario={usuario} />} />
 
         <Route path="/agentes/oficios" element={<RedactorOficios usuario={usuario} />} />
         <Route path="/agentes/memos" element={<GeneradorMemos usuario={usuario} />} />
