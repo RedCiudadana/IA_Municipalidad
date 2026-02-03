@@ -15,6 +15,7 @@ import RedactorCartas from './pages/RedactorCartas';
 import AsistenteMinutas from './pages/AsistenteMinutas';
 import ResumenExpedientes from './pages/ResumenExpedientes';
 import AnalisisInversion from './pages/AnalisisInversion';
+import RevisionContratos from './pages/RevisionContratos';
 import BibliotecaJuridica from './pages/BibliotecaJuridica';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
@@ -48,6 +49,7 @@ function AppRoutes() {
         <Route path="/agentes/minutas" element={<AsistenteMinutas usuario={usuario} />} />
         <Route path="/agentes/resumenes" element={<ResumenExpedientes usuario={usuario} />} />
         <Route path="/agentes/analisis" element={<AnalisisInversion usuario={usuario} />} />
+        <Route path="/agentes/revision-contratos" element={<RevisionContratos usuario={usuario} />} />
 
         <Route path="/biblioteca-juridica" element={<BibliotecaJuridica />} />
       </Route>

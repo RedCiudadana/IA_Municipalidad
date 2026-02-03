@@ -65,7 +65,7 @@ const Dashboard: React.FC<DashboardProps> = ({ usuario }) => {
       iconColor: 'text-orange-600',
       categoria: 'Contrataciones',
       tiempo: '4-6 min',
-      ruta: '/agentes/cartas',
+      ruta: '/agentes/revision-contratos',
       proximamente: false
     },
     {
