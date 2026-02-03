@@ -40,12 +40,12 @@ const Documentacion: React.FC<DocumentacionProps> = ({ usuario }) => {
         { nombre: 'id', tipo: 'uuid', pk: true, descripcion: 'Identificador único del usuario' },
         { nombre: 'email', tipo: 'text', unique: true, descripcion: 'Correo electrónico del usuario' },
         { nombre: 'nombre', tipo: 'text', descripcion: 'Nombre completo del usuario' },
-        { nombre: 'cargo', tipo: 'text', descripcion: 'Cargo del usuario en SEGEPLAN' },
+        { nombre: 'cargo', tipo: 'text', descripcion: 'Cargo del usuario en Municipalidad de Guatemala' },
         { nombre: 'departamento', tipo: 'text', descripcion: 'Departamento al que pertenece' },
         { nombre: 'telefono', tipo: 'text', descripcion: 'Número telefónico' },
         { nombre: 'ubicacion', tipo: 'text', descripcion: 'Ubicación física' },
         { nombre: 'biografia', tipo: 'text', descripcion: 'Biografía profesional' },
-        { nombre: 'fecha_ingreso', tipo: 'date', descripcion: 'Fecha de ingreso a SEGEPLAN' },
+        { nombre: 'fecha_ingreso', tipo: 'date', descripcion: 'Fecha de ingreso a Municipalidad de Guatemala' },
         { nombre: 'created_at', tipo: 'timestamptz', default: 'now()', descripcion: 'Fecha de creación del registro' },
         { nombre: 'updated_at', tipo: 'timestamptz', default: 'now()', descripcion: 'Fecha de última actualización' }
       ]
@@ -249,7 +249,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)`
   ];
 
   const migracionEjemplo = `/*
-  # Creación de esquema AIGP-SEGEPLAN
+  # Creación de esquema AIGP-Municipalidad de Guatemala
 
   1. Nuevas Tablas
     - \`usuarios\` - Información de usuarios del sistema
@@ -469,7 +469,7 @@ CREATE INDEX IF NOT EXISTS idx_estadisticas_agente ON estadisticas_agentes(agent
 
           <p className="text-white/90 text-lg leading-relaxed max-w-4xl">
             Documentación completa del esquema de base de datos, modelos de datos y ejemplos
-            de integración para conectar la aplicación AIGP-SEGEPLAN con Supabase.
+            de integración para conectar la aplicación AIGP-Municipalidad de Guatemala con Supabase.
           </p>
         </div>
       </div>

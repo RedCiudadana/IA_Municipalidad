@@ -18,7 +18,7 @@ const HeroSlider: React.FC = () => {
       id: 2,
       title: "Documentos Profesionales",
       subtitle: "Oficios, memos, cartas y más",
-      description: "Crea documentos que cumplen con los estándares institucionales de SEGEPLAN de manera rápida y eficiente.",
+      description: "Crea documentos que cumplen con los estándares institucionales de la Municipalidad de Guatemala de manera rápida y eficiente.",
       icon: FileText,
       gradient: "from-emerald-600 to-emerald-800",
       image: "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1200"
@@ -26,7 +26,7 @@ const HeroSlider: React.FC = () => {
     {
       id: 3,
       title: "Colaboración Institucional",
-      subtitle: "SEGEPLAN + Red Ciudadana",
+      subtitle: "Municipalidad de Guatemala + Red Ciudadana",
       description: "Un proyecto conjunto que fortalece la administración pública guatemalteca con tecnología de vanguardia.",
       icon: Users,
       gradient: "from-purple-600 to-purple-800",

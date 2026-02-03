@@ -63,7 +63,7 @@ const CursoIA: React.FC = () => {
             <div className="flex items-center justify-center space-x-6">
               <img
                 src="https://datos.segeplan.gob.gt/uploads/admin/2024-06-04-213946.470432PAGINA-DATOS-ABIERTOS-13.png"
-                alt="SEGEPLAN"
+                alt="Municipalidad de Guatemala"
                 className="h-8 w-auto object-contain"
               />
               <span className="text-gray-400">+</span>

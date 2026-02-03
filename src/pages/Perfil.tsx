@@ -377,7 +377,7 @@ const Perfil: React.FC<PerfilProps> = ({ usuario }) => {
           
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Institución</label>
-            <p className="text-gray-800 font-medium">SEGEPLAN</p>
+            <p className="text-gray-800 font-medium">Municipalidad de Guatemala</p>
           </div>
         </div>
       </div>

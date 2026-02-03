@@ -26,11 +26,11 @@ const ModalAyuda: React.FC<ModalAyudaProps> = ({ onCerrar }) => {
             {/* Introducción */}
             <div>
               <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                Bienvenido al AIGP-SEGEPLAN
+                Bienvenido al AIGP-Municipalidad de Guatemala
               </h3>
               <p className="text-gray-600 text-lg leading-relaxed">
-                El Asistente Inteligente de Gestión Pública es una herramienta desarrollada 
-                para ayudar a los funcionarios de SEGEPLAN en la creación de documentos 
+                El Asistente Inteligente de Gestión Pública es una herramienta desarrollada
+                para ayudar a los funcionarios de la Municipalidad de Guatemala en la creación de documentos
                 oficiales de manera eficiente y estandarizada.
               </p>
             </div>
