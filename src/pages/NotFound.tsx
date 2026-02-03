@@ -65,8 +65,8 @@ const NotFound: React.FC = () => {
               ¿Necesitas Ayuda?
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-              <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-2xl border border-blue-200">
+            <div className="flex justify-center">
+              <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-2xl border border-blue-200 max-w-md w-full">
                 <h4 className="font-bold text-blue-900 mb-2">Páginas Principales</h4>
                 <ul className="text-blue-800 space-y-1 text-sm">
                   <li>• Dashboard de Agentes</li>
@@ -74,15 +74,6 @@ const NotFound: React.FC = () => {
                   <li>• Historial de Documentos</li>
                   <li>• Curso de Inteligencia Artificial</li>
                 </ul>
-              </div>
-              
-              <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-6 rounded-2xl border border-purple-200">
-                <h4 className="font-bold text-purple-900 mb-2">Soporte Técnico</h4>
-                <div className="text-purple-800 space-y-1 text-sm">
-                  <p>Email: soporte@segeplan.gob.gt</p>
-                  <p>Teléfono: (502) 2230-0000</p>
-                  <p>Mesa de ayuda: Ext. 1234</p>
-                </div>
               </div>
             </div>
           </div>

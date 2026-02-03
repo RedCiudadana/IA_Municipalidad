@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, FileText, Users, Lightbulb, Phone } from 'lucide-react';
+import { X, FileText, Users, Lightbulb } from 'lucide-react';
 
 interface ModalAyudaProps {
   onCerrar: () => void;
@@ -113,24 +113,6 @@ const ModalAyuda: React.FC<ModalAyudaProps> = ({ onCerrar }) => {
                   Usa el historial para gestionar tus documentos generados
                 </li>
               </ul>
-            </div>
-
-            {/* Soporte */}
-            <div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-                <Phone className="mr-2" size={20} />
-                Soporte Técnico
-              </h3>
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-2xl border border-blue-200">
-                <p className="text-blue-900 font-bold mb-3 text-lg">
-                  Para asistencia técnica, contacta a:
-                </p>
-                <ul className="text-blue-800 space-y-2 text-lg">
-                  <li>Email: soporte@segeplan.gob.gt</li>
-                  <li>Teléfono: (502) 2230-0000</li>
-                  <li>Mesa de ayuda: Extensión 1234</li>
-                </ul>
-              </div>
             </div>
           </div>
 
