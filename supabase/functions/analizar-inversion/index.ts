@@ -1,4 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -28,7 +29,33 @@ Deno.serve(async (req: Request) => {
     });
   }
 
+  const startTime = Date.now();
+
   try {
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: "No autorizado" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: "Usuario no autenticado" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const requestData: AnalizarInversionRequest = await req.json();
 
     if (!requestData.nombre_proyecto || !requestData.monto_inversion) {
@@ -226,16 +253,71 @@ Genera un análisis profesional, completo y detallado que permita tomar decision
       ? `\n\n---\nElaborado por: ${requestData.usuario_nombre}\n${requestData.usuario_cargo || 'Departamento Jurídico'}\nMunicipalidad de Guatemala`
       : '';
 
+    const analisisFinal = analisis + firmaFinal;
+    const duracion = Date.now() - startTime;
+
+    const { data: docData, error: docError } = await supabase
+      .from('documentos')
+      .insert({
+        usuario_id: user.id,
+        tipo_documento: 'analisis_inversion',
+        titulo: requestData.nombre_proyecto,
+        contenido: analisisFinal,
+        metadata: {
+          nombre_proyecto: requestData.nombre_proyecto,
+          monto_inversion: requestData.monto_inversion,
+          plazo_ejecucion: requestData.plazo_ejecucion,
+          fuente_financiamiento: requestData.fuente_financiamiento,
+          ubicacion: requestData.ubicacion,
+          tipo_analisis: requestData.tipo_analisis,
+          beneficiarios: requestData.beneficiarios,
+          modelo: "gpt-4o"
+        }
+      })
+      .select()
+      .single();
+
+    if (docError) {
+      console.error("Error guardando documento:", docError);
+    }
+
+    const tokens = openaiData.usage?.total_tokens || 0;
+    const costoEstimado = (openaiData.usage?.prompt_tokens || 0) * 0.0000025 +
+                          (openaiData.usage?.completion_tokens || 0) * 0.00001;
+
+    const { error: transError } = await supabase
+      .from('transacciones_api')
+      .insert({
+        usuario_id: user.id,
+        documento_id: docData?.id,
+        agente: 'analizar-inversion',
+        modelo: 'gpt-4o',
+        tokens_entrada: openaiData.usage?.prompt_tokens || 0,
+        tokens_salida: openaiData.usage?.completion_tokens || 0,
+        tokens_total: tokens,
+        costo: costoEstimado,
+        duracion: duracion,
+        estado: 'exitoso'
+      });
+
+    if (transError) {
+      console.error("Error registrando transacción:", transError);
+    }
+
     return new Response(
       JSON.stringify({
-        analisis: analisis + firmaFinal,
+        analisis: analisisFinal,
+        documento_id: docData?.id,
+        guardado: !docError,
         metadata: {
           proyecto: requestData.nombre_proyecto,
           monto: requestData.monto_inversion,
           tipo_analisis: requestData.tipo_analisis,
           timestamp: new Date().toISOString(),
           modelo: "gpt-4o",
-          tokens: openaiData.usage?.total_tokens || 0
+          tokens: tokens,
+          costo_usd: costoEstimado.toFixed(6),
+          duracion_ms: duracion
         }
       }),
       {

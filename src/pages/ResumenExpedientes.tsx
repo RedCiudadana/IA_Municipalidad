@@ -70,6 +70,10 @@ const ResumenExpedientes: React.FC<ResumenExpedientesProps> = ({ usuario }) => {
 
       const result = await response.json();
       setDocumento(result.resumen || 'No se pudo generar el resumen.');
+
+      if (result.guardado && result.documento_id) {
+        console.log('Documento guardado exitosamente con ID:', result.documento_id);
+      }
     } catch (err) {
       console.error('Error:', err);
       setDocumento(`Error al generar el resumen: ${err instanceof Error ? err.message : 'Error desconocido'}`);

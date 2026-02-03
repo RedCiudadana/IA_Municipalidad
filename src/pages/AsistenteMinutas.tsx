@@ -68,6 +68,10 @@ const AsistenteMinutas: React.FC<AsistenteMinutasProps> = ({ usuario }) => {
 
       const result = await response.json();
       setDocumento(result.documento || 'No se pudo generar la minuta/acta.');
+
+      if (result.guardado && result.documento_id) {
+        console.log('Documento guardado exitosamente con ID:', result.documento_id);
+      }
     } catch (err) {
       console.error('Error:', err);
       setDocumento(`Error al generar la minuta/acta: ${err instanceof Error ? err.message : 'Error desconocido'}`);

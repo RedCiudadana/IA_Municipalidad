@@ -1,4 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -28,7 +29,33 @@ Deno.serve(async (req: Request) => {
     });
   }
 
+  const startTime = Date.now();
+
   try {
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: "No autorizado" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: "Usuario no autenticado" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const requestData: GenerarMinutaRequest = await req.json();
 
     if (!requestData.titulo_reunion || !requestData.fecha_reunion || !requestData.lugar) {
@@ -192,16 +219,68 @@ Genera un documento completo, profesional y detallado. Incluye orden del día re
       ? `\n\n---\n${requestData.usuario_nombre}\n${requestData.usuario_cargo || 'Departamento Jurídico'}\nMunicipalidad de Guatemala`
       : '';
 
+    const documentoFinal = documento + firmaFinal;
+    const duracion = Date.now() - startTime;
+
+    const { data: docData, error: docError } = await supabase
+      .from('documentos')
+      .insert({
+        usuario_id: user.id,
+        tipo_documento: 'minuta',
+        titulo: requestData.titulo_reunion,
+        contenido: documentoFinal,
+        metadata: {
+          tipo: requestData.tipo_documento,
+          fecha_reunion: requestData.fecha_reunion,
+          lugar: requestData.lugar,
+          participantes: participantesLista,
+          modelo: "gpt-4o"
+        }
+      })
+      .select()
+      .single();
+
+    if (docError) {
+      console.error("Error guardando documento:", docError);
+    }
+
+    const tokens = openaiData.usage?.total_tokens || 0;
+    const costoEstimado = (openaiData.usage?.prompt_tokens || 0) * 0.0000025 +
+                          (openaiData.usage?.completion_tokens || 0) * 0.00001;
+
+    const { error: transError } = await supabase
+      .from('transacciones_api')
+      .insert({
+        usuario_id: user.id,
+        documento_id: docData?.id,
+        agente: 'generar-minuta',
+        modelo: 'gpt-4o',
+        tokens_entrada: openaiData.usage?.prompt_tokens || 0,
+        tokens_salida: openaiData.usage?.completion_tokens || 0,
+        tokens_total: tokens,
+        costo: costoEstimado,
+        duracion: duracion,
+        estado: 'exitoso'
+      });
+
+    if (transError) {
+      console.error("Error registrando transacción:", transError);
+    }
+
     return new Response(
       JSON.stringify({
-        documento: documento + firmaFinal,
+        documento: documentoFinal,
+        documento_id: docData?.id,
+        guardado: !docError,
         metadata: {
           tipo: requestData.tipo_documento,
           titulo: requestData.titulo_reunion,
           fecha: requestData.fecha_reunion,
           timestamp: new Date().toISOString(),
           modelo: "gpt-4o",
-          tokens: openaiData.usage?.total_tokens || 0
+          tokens: tokens,
+          costo_usd: costoEstimado.toFixed(6),
+          duracion_ms: duracion
         }
       }),
       {
